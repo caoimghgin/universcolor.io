@@ -59,7 +59,7 @@ export default class ColumnModel {
         this.swatches.forEach((swatch, idx) => {
             if (swatch === null) {
                 let target = targets[idx];
-                target = target !== 50 ? target : target - 0.25;
+                target = target !== 50 ? target : target - 1.50;
                 target = target !== 97.5? target : target - 0.75;
                 target = target !== 95.0? target : target - 1.50;
                 target = target !== 90.0? target : target - 1.00;

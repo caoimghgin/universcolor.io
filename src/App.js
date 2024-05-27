@@ -35,12 +35,12 @@ function App() {
 
   // const color =  new Color('srgb', hexToDecimal("#8352C6"))
   // const color = new Color("#8352C6") 
-  const color = new Color("oklch(41.03% 0.1 117)")
-  console.log(color.as("hex")) //8352c6
+  // const color = new Color("oklch(41.03% 0.1 117)")
+  // console.log(color.as("hex")) //8352c6
 
   const palette = new Palette([
     [new Color("oklch(51.11% 0.1549 228)"), new Color("oklch(70% 0.1549 228)")], 
-    [new Color("#8352c6")], 
+    [new Color("#216DFA")], 
     [new Color("#7b6747")], 
     [new Color("#007c00")], 
     [new Color("#d80000")], 
@@ -51,16 +51,14 @@ function App() {
     [new Color("#6a6a6a")]
   ])
 
-  console.log(palette.getColors("hex"))
+  console.log("getColors()", palette.getColors("hex"))
 
-  // SwatchView()
 
-   const a = palette.columns[0].swatches[12]
-   console.log("THIS IS A", a)
+  const test = new Color("#857355")
+  console.log(test.as("lab"))
+  // console.log("test---", test.getColors("lab"))
 
-  // console.log(palette)
-
-  const f = SwatchView(a)
+  
 
   return (
     <div className="App">
