@@ -9,7 +9,8 @@ export default class ColumnModel {
 
         this.swatches = [];
         this.stepsDeltaE = 1.0;
-        this.stepsSpace = "oklch"
+        this.stepsSpace = "oklch"              
+        // console.log(`${value} -> color-js(L* ${clr.lab_d65.l.toFixed(2)}) / chroma-js(L* ${chr.get('lab.l').toFixed(2)})`)
 
         this.init = (colors) => {
             this.swatches = Array.apply(null, Array(targets.length)).map(
@@ -59,18 +60,18 @@ export default class ColumnModel {
         this.swatches.forEach((swatch, idx) => {
             if (swatch === null) {
                 let target = targets[idx];
-                target = target !== 50 ? target : target - 1.50;
+                target = target !== 50 ? target : target - 0.50;
                 target = target !== 97.5? target : target - 0.75;
                 target = target !== 95.0? target : target - 1.50;
                 target = target !== 90.0? target : target - 1.00;
                 target = target !== 5.0? target : target + 0.25;
                 const color = candidateSwatches.reduce(function (prev, curr) {
-                    return Math.abs(curr.lab.l - target) < Math.abs(prev.lab.l - target)
+                    return Math.abs(curr.lab_d65.l - target) < Math.abs(prev.lab_d65.l - target)
                         ? curr
                         : prev;
                 });
                 const space = color.space.id;
-                const luminance = color.lab.l;
+                const luminance = color.lab_d65.l;
                 const weight = luminanceToWeight(luminance);
                 this.swatches[idx] = new Swatch(weight, color, space, null);
             }

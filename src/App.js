@@ -38,9 +38,12 @@ function App() {
   // const color = new Color("oklch(41.03% 0.1 117)")
   // console.log(color.as("hex")) //8352c6
 
+  const color = new Color("#2A7BB8")
+  console.log(color)
+
   const palette = new Palette([
-    [new Color("oklch(51.11% 0.1549 228)"), new Color("oklch(70% 0.1549 228)")], 
-    [new Color("#216DFA")], 
+    [new Color("oklch(49.25% 0.121 237.21)")], 
+    [new Color("#8B60CA")], 
     [new Color("#7b6747")], 
     [new Color("#007c00")], 
     [new Color("#d80000")], 

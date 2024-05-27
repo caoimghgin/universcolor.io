@@ -1,4 +1,3 @@
-// import WeightView from "./WeightView"
 import { weights } from "../Colorific/constants"
 
 export default function WeightsView(props) {
@@ -13,7 +12,7 @@ export default function WeightsView(props) {
 function WeightView(props) {
     if (!props.model) return
     return (
-        <div className="Weight" style={{ width: 50, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div className="Weight" style={{ width: 50, height: 24, fontSize: '12px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             {props.model}
         </div>
     )

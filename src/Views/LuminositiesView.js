@@ -10,7 +10,7 @@ export default function LuminositiesView() {
 
 function LuminanceView(props) {
     return (
-        <div className="Luminance" style={{ width: 50, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+        <div className="Luminance" style={{ width: 50, height: 24, fontSize: "12px", fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             {props.model.toString()}
         </div>
     )
