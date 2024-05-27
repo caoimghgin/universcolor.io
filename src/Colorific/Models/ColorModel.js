@@ -1,7 +1,7 @@
 import Color from 'colorjs.io';
 import { colorToHex, percentToEightBit, toCoords, gamutMap, rgbObject } from '../utilities';
 
-export default class GNMColor extends Color {
+export default class ColorModel extends Color {
 
     constructor(...args) {
         super(...args);
