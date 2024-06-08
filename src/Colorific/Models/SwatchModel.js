@@ -1,5 +1,6 @@
 export default class SwatchModel {
     constructor(weight, color, origin, priority) {
+        this.id = parseInt(weight)
         this.weight = weight;
         this.color = color;
         this.priority = priority === null ? -1 : priority
@@ -7,3 +8,4 @@ export default class SwatchModel {
         this.wideGamut = !color.inGamut("srgb")
     }
 }
+

@@ -1,73 +1,85 @@
-import logo from './logo.svg';
-import './App.css';
-import Color from './Colorific/Models/ColorModel';
-import SwatchView from './Views/SwatchView';
-import Palette from './Colorific/Models/PaletteModel';
-import ColumnView from './Views/ColumnView';
-import PaletteView from './Views/PaletteView';
 
-import { hexToDecimal } from './Colorific/utilities';
+import chroma from 'chroma-js';
+import ColorModel from './Colorific/Models/ColorModel';
+import PaletteModel from './Colorific/Models/PaletteModel';
+import PaletteView from './Views/PaletteView';
+import midtones from './Colorific/constants/midtones.js'
+import midtones050 from './Colorific/constants/midtones050.js'
 
 function App() {
 
-  // const color =  new Color('srgb', hexToDecimal("#8352C6"))
-  // const color = new Color('lab', [50, 0, 0])
-  // const colo2 = new Color('lab', [75, 0, 0])
-  // const color = new Color("okhsl", [276, 0, 1])
-  // const column = new Column([color, colo2]);
-  // console.log(column.getColors("hex"))
-  // console.log(column.values())
-  // console.log(column)
-
-  //
-  // I need a Controller. 
-  //
-
-  	/**
-	 * Creates an instance of Color.
-	 * Signatures:
-	 * - `new Color(stringToParse)`
-	 * - `new Color(otherColor)`
-	 * - `new Color({space, coords, alpha})`
-	 * - `new Color(space, coords, alpha)`
-	 * - `new Color(spaceId, coords, alpha)`
-	 */
-
-  // const color =  new Color('srgb', hexToDecimal("#8352C6"))
-  // const color = new Color("#8352C6") 
-  // const color = new Color("oklch(41.03% 0.1 117)")
-  // console.log(color.as("hex")) //8352c6
-
-  const color = new Color("#2A7BB8")
-  console.log(color)
-
-  const palette = new Palette([
-    [new Color("oklch(49.25% 0.121 237.21)")], 
-    [new Color("#8B60CA")], 
-    [new Color("#7b6747")], 
-    [new Color("#007c00")], 
-    [new Color("#d80000")], 
-    [new Color("#FFCF3D")], 
-    [new Color("#F57C13")], 
-    [new Color("#035ef9")], 
-    [new Color("#0A66D8")], 
-    [new Color("#6a6a6a")]
+  const palette = new PaletteModel([
+    [new ColorModel("oklch(49.25% 0.121 237.21)")], 
+    [new ColorModel("#8B60CA")], 
+    [new ColorModel("#7b6747")], 
+    [new ColorModel("#007c00")], 
+    [new ColorModel("#d80000")], 
+    [new ColorModel("#FFCF3D")], 
+    [new ColorModel("#F57C13")], 
+    [new ColorModel("#035ef9")], 
+    [new ColorModel("#0A66D8")], 
+    [new ColorModel("#6a6a6a")]
   ])
-
-  console.log("getColors()", palette.getColors("hex"))
-
-
-  const test = new Color("#857355")
-  console.log(test.as("lab"))
-  // console.log("test---", test.getColors("lab"))
-
-  
 
   return (
     <div className="App">
       <PaletteView model={palette}/>
     </div>
   );
+}
+
+function generateMidtones() {
+  console.log("LENGTH:", midtones.length)
+
+  const max = midtones.reduce(function(prev, current) {
+    return (prev && prev.luminance_d65 > current.luminance_d65) ? prev : current
+  })
+
+  const min = midtones.reduce(function(prev, current) {
+    return (prev && prev.luminance_d65 < current.luminance_d65) ? prev : current
+  })
+
+  const avg = midtones.map(item => item.luminance_d65).reduce((p,c,_,a) => p + c/a.length,0)
+
+  console.log("max", max)
+  console.log("min", min)
+  console.log("avg", avg)
+
+  return 
+  const results = []
+
+  let n = 0;
+  while (results.length < 1001) {
+    const color = new ColorModel(chroma.random().hex('rgb'))
+    if ( (color.lab_d65.l >= 45) && (color.lab_d65.l <= 55)) {
+      const hex = color.as("hex")
+      const wcagOnWhite = color.contrast(new ColorModel("#FFFFFF"), "WCAG21")
+      const wcagOnBlack = color.contrast(new ColorModel("#000000"), "WCAG21")
+      if ((wcagOnWhite >= 4.5) && (wcagOnBlack >= 4.5)) {
+        results.push({value:hex, luminance_d65: color.lab_d65.l.toFixed(3), wcag_w:wcagOnWhite.toFixed(3), wcag_k: wcagOnBlack.toFixed(3)})
+      }
+
+    }
+    n++;
+  }
+  console.log(results)
+}
+
+function generateMidtones_550() {
+
+  const max = midtones050.reduce(function(prev, current) {
+    return (prev && prev.luminance_d65 > current.luminance_d65) ? prev : current
+  })
+
+  const min = midtones050.reduce(function(prev, current) {
+    return (prev && prev.luminance_d65 < current.luminance_d65) ? prev : current
+  })
+
+  const avg = midtones050.map(item => item.luminance_d65).reduce((p,c,_,a) => p + c/a.length,0)
+
+  console.log("max", max)
+  console.log("min", min)
+  console.log("avg", avg)
 }
 
 export default App;

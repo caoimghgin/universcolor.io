@@ -1,18 +1,17 @@
 import { useState, useEffect } from "react"
-import Color from "../Colorific/Models/ColorModel"
 import { luminanceToWeight } from "../Colorific/utilities"
-import chroma from "chroma-js"
+import Color from "../Colorific/Models/ColorModel"
 
 export default function SwatchView(props) {
     const [WCAG, setWCAG] = useState(1)
     const [style, setStyle] = useState(null)
     useEffect(() => {
         qualityControl(props.model)
-        const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
+        const WCAGRatioOnWhite = props.model.color.contrast(new Color("#EEEEEE"), "WCAG21")
         setWCAG(WCAGRatioOnWhite)
         setStyle({
             backgroundColor: props.model.color.as("hex"),
-            color: (WCAGRatioOnWhite > 3.0) ? "#FFFFFF" : "#000000",
+            color: (WCAGRatioOnWhite > 3.0) ? "#E5EEFC" : "#000000",
             fontSize: '12px',
             fontWeight: (WCAGRatioOnWhite >= 3.0 && WCAGRatioOnWhite < 4.5) ? 700 : 400,
             width: 50,
@@ -20,13 +19,14 @@ export default function SwatchView(props) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            textDecoration: (props.model.priority > -1) ? 'underline' : 'none'
         })
     }, [])
 
     return (
-        <div className="Swatch" style={style}>
-            {/* {parseFloat(props.model.color.lab_d65.l).toFixed(2)}   */}
-            {WCAG.toFixed(2)}
+        <div key={props.model.id} className="SwatchView" style={style}>
+            {parseFloat(props.model.color.lab_d65.l).toFixed(2)}  
+            {/* {WCAG.toFixed(2)} */}
         </div>
     )
 }
@@ -38,14 +38,12 @@ function anchorEmoji(priority) {
 }
 
 function qualityControl(model) {
-
     const value = model.color.as("hex")
     const clr = new Color(value)
-    const chr = chroma(value)
     if (luminanceToWeight(model.color.lab.l) === "500") {
         const wcagOnWhite = model.color.contrast(new Color("#FFFFFF"), "WCAG21")
         const wcagOnBlack = model.color.contrast(new Color("#000000"), "WCAG21")
-        console.log(`${value} -> color-js(L* ${clr.lab_d65.l.toFixed(2)}) / chroma-js(L* ${chr.get('lab.l').toFixed(2)}) *** ${wcagOnWhite.toFixed(2)}/${wcagOnBlack.toFixed(2)}`)
+        // console.log(`${value} -> color-js(L* ${clr.lab_d65.l.toFixed(2)}) *** W: ${wcagOnWhite.toFixed(2)}/K: ${wcagOnBlack.toFixed(2)}`)
     }
 
 }

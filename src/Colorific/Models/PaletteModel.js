@@ -5,8 +5,8 @@ export default class PaletteModel {
     constructor(colors) {
         this.columns = [];
         this.init = (colors) => {
-            colors.forEach(colors => {
-                this.columns.push(new Column(colors));
+            colors.forEach((colors, index) => {
+                this.columns.push(new Column(colors, index));
             })
         }
         this.init(Array.isArray(colors) ? colors : []);

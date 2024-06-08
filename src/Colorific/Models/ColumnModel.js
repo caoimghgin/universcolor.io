@@ -5,25 +5,25 @@ import { luminanceToWeight } from '../utilities';
 
 export default class ColumnModel {
 
-    constructor(colors) {
+    constructor(colors, index) {
 
+        this.id = index
         this.swatches = [];
-        this.stepsDeltaE = 1.0;
+        this.stepsDeltaE = 1.5;
         this.stepsSpace = "oklch"              
-        // console.log(`${value} -> color-js(L* ${clr.lab_d65.l.toFixed(2)}) / chroma-js(L* ${chr.get('lab.l').toFixed(2)})`)
 
         this.init = (colors) => {
-            this.swatches = Array.apply(null, Array(targets.length)).map(
-                item => null
-            );
+            this.id = index
+            this.swatches = Array.apply(null, Array(targets.length)).map(item => null)
             colors.forEach((color, idx) => {
                 const luminance = color.lab.l;
                 const weight = luminanceToWeight(luminance);
                 const space = color.space.id;
                 const index = weights.findIndex(item => item === weight);
-                this.swatches[index] = new Swatch(weight, color, space, idx);
+                this.swatches[index] = new Swatch(weight, color, space, idx, index);
             });
         };
+
         this.init(Array.isArray(colors) ? colors : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
@@ -59,10 +59,10 @@ export default class ColumnModel {
 
         this.swatches.forEach((swatch, idx) => {
             if (swatch === null) {
-                let target = targets[idx];
+                let target = targets[idx]
                 target = target !== 50 ? target : target - 0.50;
                 target = target !== 97.5? target : target - 0.75;
-                target = target !== 95.0? target : target - 1.50;
+                target = target !== 95.0? target : target - 1.00;
                 target = target !== 90.0? target : target - 1.00;
                 target = target !== 5.0? target : target + 0.25;
                 const color = candidateSwatches.reduce(function (prev, curr) {
@@ -76,6 +76,16 @@ export default class ColumnModel {
                 this.swatches[idx] = new Swatch(weight, color, space, null);
             }
         });
+    }
+
+    tweekTarget(target) {
+        target = target !== 50 ? target : target - 0.50;
+        target = target !== 45 ? target : target - 2.25;
+        target = target !== 97.5? target : target - 0.75;
+        target = target !== 95.0? target : target - 1.50;
+        target = target !== 90.0? target : target - 1.00;
+        target = target !== 5.0? target : target + 0.25;
+        return target
     }
 
     getColors(space) {
