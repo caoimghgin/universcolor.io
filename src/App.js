@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react"
 import ColorModel from './Colorific/Models/ColorModel';
 import PaletteModel from './Colorific/Models/PaletteModel';
@@ -33,7 +32,7 @@ function App() {
     [new ColorModel("#007c00")],
     [new ColorModel("#d80000")],
     [new ColorModel("#FFCF3D")],
-    [new ColorModel("#F57C13")],
+    [new ColorModel("#FD6905")], 
     [new ColorModel("#035ef9")],
     [new ColorModel("#0A66D8")],
     [new ColorModel("#6a6a6a")]

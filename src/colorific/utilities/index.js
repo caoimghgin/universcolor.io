@@ -17,7 +17,7 @@ export const percentToEightBit = (value) => {
 }
 
 export const rgbObject = (rgb) => {
-    return {r: rgb[0], g: rgb[1], b: rgb[2]}
+    return { r: rgb[0], g: rgb[1], b: rgb[2] }
 }
 
 export const hexToRgb = (hex) => {
@@ -56,4 +56,8 @@ export const gamutMap = (color, space) => {
 export const toCoords = (value) => {
     const result = value.replace(/[|&;$%@"<>()+,a-z]/g, "")
     return result.split(" ").map(item => parseFloat(item))
+}
+
+export const dpsConstrast = (a, b) => {
+    return ((Math.abs(a ** 1.618 - b ** 1.618) ** 0.618) * 1.414 - 40).toFixed(2)
 }
