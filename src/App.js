@@ -27,15 +27,15 @@ function App() {
 
   const palette = new PaletteModel([
     [new ColorModel("oklch(49.25% 0.121 237.21)")],
-    [new ColorModel("#8B60CA")],
-    [new ColorModel("#7b6747")],
+    [new ColorModel("lch(49.14% 100.64 305.02)"), new ColorModel("lch(74.58% 48.775 297.72)")],
+    [new ColorModel("#7b6747"), new ColorModel("oklab(35.512% 0.00687 0.03516)")],
     [new ColorModel("#007c00")],
     [new ColorModel("#d80000")],
     [new ColorModel("#FFCF3D")],
     [new ColorModel("#FD6905")], 
     [new ColorModel("#035ef9")],
     [new ColorModel("#0A66D8")],
-    [new ColorModel("#6a6a6a")]
+    [new ColorModel("#7F7F7F")]
   ])
 
   return (

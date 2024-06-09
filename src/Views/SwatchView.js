@@ -44,7 +44,7 @@ export default function SwatchView(props) {
             const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
             const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
 
-            setFontColor((Math.abs(LcW) >= 60) ? "#FFFFFF" : "#000000")
+            setFontColor((Math.abs(LcW) >= 59) ? "#FFFFFF" : "#000000")
             if ((Math.abs(LcW) >= 60)) setFontSize("16px")
             if ((Math.abs(LcW) >= 60)) setFontWeight(700)
             if ((Math.abs(LcW) >= 75)) setFontSize("12px")
@@ -108,6 +108,9 @@ export default function SwatchView(props) {
         const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
         const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
         console.log(`white:${LcW} black:${LcK}`)
+        console.log(model.color.as("lch") )
+        console.log(model.color.as("oklab") )
+
     }
 
     const SwatchViewDetailStyled = styled.div`
@@ -117,13 +120,13 @@ export default function SwatchView(props) {
         color: black;
         font-weight: 400;
         font-size: 14pt;
-        background: black;
+        background: ${props.model.color.as("hex")};
         transition:visibility 0.3s linear,opacity 0.3s linear;
         text-align: center;
         vertical-align: middle;
         line-height: 80px;
-        width:200px;
-        height:80px;
+        width:100px;
+        height:100px;
         filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.25)); 
     `
 
@@ -138,7 +141,6 @@ export default function SwatchView(props) {
         font-weight: ${fontWeight};
         background: ${props.model.color.as("hex")};
         font-size: ${fontSize};
-        background: ${props.model.color.as("hex")};
         color: ${fontColor};
         text-decoration: ${fontDecoration};
         &:hover { 
