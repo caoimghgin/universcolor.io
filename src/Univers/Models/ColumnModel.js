@@ -1,32 +1,38 @@
 import Color from './ColorModel';
-import Swatch from './SwatchModel';
+import SwatchModel from './SwatchModel';
 import { targets, weights } from '../constants';
 import { luminanceToWeight } from '../utilities';
 
 export default class ColumnModel {
 
-    constructor(colors, index) {
+    id = 0
+    swatches = []
+    stepsDeltaE = 1.5
+    stepsSpace = "oklch" 
+    
+    constructor(args, index) {
 
-        this.id = index
-        this.swatches = [];
-        this.stepsDeltaE = 1.5;
-        this.stepsSpace = "oklch"              
+        this.id = index           
 
-        this.init = (colors) => {
+        this.init = (args) => {
             this.id = index
             this.swatches = Array.apply(null, Array(targets.length)).map(item => null)
-            colors.forEach((color, idx) => {
+
+            // this.space = new SwatchModel(colors[0]).space.id
+            this.space = args ? args[0].space.id : null
+            args.forEach((color, idx) => {
                 const luminance = color.lab.l;
                 const weight = luminanceToWeight(luminance);
                 const space = color.space.id;
                 const index = weights.findIndex(item => item === weight);
-                this.swatches[index] = new Swatch(weight, color, space, idx, index);
+                this.swatches[index] = new SwatchModel(weight, color, space, idx, index)
             });
         };
 
-        this.init(Array.isArray(colors) ? colors : []);
+        this.init(Array.isArray(args) ? args : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
+        this.swatches.forEach(swatch => swatch.root = this.space )
     }
 
     insertBlackAndWhite() {
@@ -34,13 +40,13 @@ export default class ColumnModel {
             const color = new Color('lab', [100.0, 0.0, 0.0]);
             const weight = luminanceToWeight(color.lab.l);
             const space = color.space.id
-            this.swatches[0] = new Swatch(weight, color, space, null);
+            this.swatches[0] = new SwatchModel(weight, color, space, null);
         }
         if (this.swatches[21] === null) {
             const color = new Color('lab', [0.0, 0.0, 0.0]);
             const weight = luminanceToWeight(color.lab.l);
             const space = color.space.id
-            this.swatches[21] = new Swatch(weight, color, space, null);
+            this.swatches[21] = new SwatchModel(weight, color, space, null);
         }
     }
 
@@ -77,7 +83,7 @@ export default class ColumnModel {
                 const space = color.space.id;
                 const luminance = color.lab_d65.l;
                 const weight = luminanceToWeight(luminance);
-                this.swatches[idx] = new Swatch(weight, color, space, null);
+                this.swatches[idx] = new SwatchModel(weight, color, space, null);
             }
         });
     }
