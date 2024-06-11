@@ -1,4 +1,4 @@
-import { weights } from "../Colorific/constants"
+import { weights } from "../Univers/constants"
 
 const containerStyle = { display: 'flex' }
 const itemStyle = { width: 50, height: 24, fontSize: '12px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center'}

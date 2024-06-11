@@ -1,30 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { luminanceToWeight, dpsConstrast } from "../Colorific/utilities"
+import { luminanceToWeight, dpsConstrast } from "../Univers/utilities"
 import styled from '@emotion/styled/macro';
 import { calcAPCA } from 'apca-w3';
 
-import { Event } from "../Colorific/constants/Events"
-import Color from "../Colorific/Models/ColorModel"
+import { Event } from "../Univers/constants/Events"
+import Color from "../Univers/Models/ColorModel"
 
 export default function SwatchView(props) {
 
     const [model, setModel] = useState(null)
     const [WCAG, setWCAG] = useState(1)
     const [style, setStyle] = useState(null)
-    const [value, setValue] = useState(parseFloat(props.model.color.lab_d65.l).toFixed(2))
+    const [value, setValue] = useState(null)
     const [isVisible, setIsVisible] = React.useState(true)
     const [fontColor, setFontColor] = useState("#FFFFFF")
-    const [fontSize, setFontSize] = useState("24px")
+    const [fontSize, setFontSize] = useState("0px")
     const [fontWeight, setFontWeight] = useState(400)
     const [fontDecoration, setFontDecoration] = useState("none")
 
     const [contrastStandard, setContrastStandard] = useState("apca")
-    const [displayMetric, setDisplayMetric] = useState("wcag")      //[L*d65, deltaPhiStar, wcag, ]
+    const [displayMetric, setDisplayMetric] = useState("wcag21")      // [L*d65, deltaPhiStar, wcag, ]
 
-    useEffect(() => {        
+    useEffect(() => {
+        console.log(props.model)
         setModel(props.model)
+        window.addEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+        window.addEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        return () => {
+            window.removeEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+            window.removeEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        }
+    }, [])
 
-        if (contrastStandard === "wcag") {
+    useEffect(() => {
+        
+        if (displayMetric === "none") setValue("")
+        if (displayMetric === "wcag21") setValue(props.model.color.contrast(new Color("#FFFFFF"), "WCAG21").toFixed(1))
+        if (displayMetric === "apcalc_white") setValue(props.model.color.contrast(new Color("#FFFFFF"), "APCA").toFixed(1))
+        if (displayMetric === "apcalc_black") setValue(props.model.color.contrast(new Color("#000000"), "APCA").toFixed(1))
+        if (displayMetric === "ciel*d65") setValue(parseFloat(props.model.color.lab_d65.l).toFixed(1))
+
+    }, [displayMetric]);
+
+    useEffect(() => {
+        
+        if (contrastStandard === "wcag21") {
             const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
             setWCAG(WCAGRatioOnWhite)
             setFontColor((WCAGRatioOnWhite > 3.0) ? "#FFFFFF" : "#000000")
@@ -35,81 +55,58 @@ export default function SwatchView(props) {
             if (WCAGRatioOnWhite >= 4.5) setFontWeight(400)
 
             if (props.model.priority > -1) setFontDecoration('underline')
-
-                
-
-        } 
-
-        if (contrastStandard === "apca") {
-            const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
-            const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
-
-            setFontColor((Math.abs(LcW) >= 59) ? "#FFFFFF" : "#000000")
-            if ((Math.abs(LcW) >= 60)) setFontSize("16px")
-            if ((Math.abs(LcW) >= 60)) setFontWeight(700)
-            if ((Math.abs(LcW) >= 75)) setFontSize("12px")
-
-                if ((props.model.priority > -1) && (Math.abs(LcW) < 60 && Math.abs(LcK) < 60)) {
-                    setFontDecoration('underline line-through')
-                } else if ((props.model.priority > -1)) {
-                    setFontDecoration('underline')
-                } else if ((Math.abs(LcW) < 60 && Math.abs(LcK) < 60)) {
-                    setFontDecoration('line-through')
-                }
-                    
-
-
-        } 
-
-        
-        setValue(dpsConstrast(100, parseFloat(props.model.color.lab_d65.l).toFixed(2)))
-        setValue(Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex"))))
-        // setValue(calcAPCA("#FFFFFF", props.model.color.as("hex")).toFixed(1))
-        // setValue(calcAPCA("#000000", props.model.color.as("hex")).toFixed(1))
-        // setValue("")
-
-        window.addEventListener('scroll', onScrollHandler);
-        document.addEventListener(Event.SHOW_CONTRAST, onShowContrastHandler)
-
-        qualityControl(props.model)
-        const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
-        setWCAG(WCAGRatioOnWhite)
-        // setStyle({
-        //     backgroundColor: props.model.color.as("hex"),
-        //     color: (WCAGRatioOnWhite > 3.0) ? "#E5EEFC" : "#000000",
-        //     fontSize: '16px',
-        //     fontWeight: (WCAGRatioOnWhite >= 3.0 && WCAGRatioOnWhite < 4.5) ? 700 : 400,
-        //     width: 50,
-        //     height: 50,
-        //     display: 'flex',
-        //     alignItems: 'center',
-        //     justifyContent: 'center',
-        //     textDecoration: (props.model.priority > -1) ? 'underline' : 'none'
-        // })
-
-
-
-
-        return () => {
-            window.removeEventListener('scroll', onScrollHandler);
-            document.removeEventListener(Event.SHOW_CONTRAST, onShowContrastHandler)
         }
 
-    }, [])
+        if (contrastStandard === "apca") {
+            setFontWeight(700)
+            setFontSize(17.5)
 
-    const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
+            const LcW = Math.round(props.model.color.contrast(new Color("white"), "APCA"))
+            const LcK = Math.round(props.model.color.contrast(new Color("black"), "APCA"))
+
+            setFontColor((Math.abs(LcW) >= 60) ? "#FFFFFF" : "#000000")
+            if ((Math.abs(LcW) >= 60)) setFontSize("16px")
+            if ((Math.abs(LcW) >= 75)) setFontSize("12px")
+
+            if ((props.model.priority > -1) && (Math.abs(LcW) < 60 && Math.abs(LcK) < 60)) {
+                setFontDecoration('underline line-through')
+            } else if ((props.model.priority > -1)) {
+                setFontDecoration('underline')
+            } else if ((Math.abs(LcW) < 60 && Math.abs(LcK) < 60)) {
+                setFontDecoration('line-through')
+            }
+
+
+
+        }
+    }, [contrastStandard])
+
+    const selectedSwatchDisplayOptionEventHandler = (event) => {
+        setDisplayMetric(event.detail.value)
+    }
+
+    const selectedContrastOptionEventHandler = (event) => {
+        setContrastStandard(event.detail.value)
+    }
 
     const onMouseEnterHandler = () => {
         // console.log(model.color.as("hex"))
     }
-     
+
     const onClickHandler = () => {
-        console.log(model, model.color.as("hex"))
-        const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
-        const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
-        console.log(`white:${LcW} black:${LcK}`)
-        console.log(model.color.as("lch") )
-        console.log(model.color.as("oklab") )
+        // const color = model.getColor()
+
+        // const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
+        // const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
+        // console.log(`white:${LcW} black:${LcK}`)
+        // console.log(model, model.color.as("hex"))
+
+        model.color = null
+
+        console.log(model.color.to("oklch").toString({precision: 2}))
+        console.log(model.color.to("lch").toString({precision: 2}))
+
+        // console.log("getColor", model.getColor())
 
     }
 
@@ -120,7 +117,7 @@ export default function SwatchView(props) {
         color: black;
         font-weight: 400;
         font-size: 14pt;
-        background: ${props.model.color.as("hex")};
+        background: ${props.model.color.to(props.model.root).toString({precision: 2})};
         transition:visibility 0.3s linear,opacity 0.3s linear;
         text-align: center;
         vertical-align: middle;
@@ -139,7 +136,7 @@ export default function SwatchView(props) {
         width: 50px;
         height: 50px;
         font-weight: ${fontWeight};
-        background: ${props.model.color.as("hex")};
+        background: ${props.model.color.to(props.model.root).toString({precision: 2})};
         font-size: ${fontSize};
         color: ${fontColor};
         text-decoration: ${fontDecoration};
@@ -156,41 +153,13 @@ export default function SwatchView(props) {
     return (
         <SwatchViewStyled key={props.model.id} onMouseEnter={onMouseEnterHandler} onClick={onClickHandler}>
             {value}
-            <SwatchViewDetailStyled/>
+            <SwatchViewDetailStyled />
             {/* {parseFloat(props.model.color.lab_d65.l).toFixed(2)} */}
             {/* {WCAG.toFixed(2)} */}
         </SwatchViewStyled>
     )
 
-    function onShowContrastHandler(event) {
-        console.log("onShowContrastHandler...", event)
-    }
 
-
-}
-
-
-
-
-
-
-
-// const onKeyDownEventHandler = (event) => {
-//     console.log(event)
-//     // if (event.repeat) return;
-//     // if (event.key === "3") { setIsControlDown(3) }
-//     // if (event.key === "4") { setIsControlDown(4.5) }
-//     // if (event.key === "7") { setIsControlDown(7) }
-// }
-
-const onScrollHandler = (event) => {
-    console.info("onScrollHandler", event)
-};
-
-function anchorEmoji(priority) {
-    if (priority === null || priority < 0) return " "
-    if (priority === 0) return "⭐️"
-    return "📍"
 }
 
 function qualityControl(model) {
