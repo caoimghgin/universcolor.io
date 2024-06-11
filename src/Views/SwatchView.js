@@ -14,7 +14,7 @@ export default function SwatchView(props) {
     const [value, setValue] = useState(null)
     const [isVisible, setIsVisible] = React.useState(true)
     const [fontColor, setFontColor] = useState("#FFFFFF")
-    const [fontSize, setFontSize] = useState("24px")
+    const [fontSize, setFontSize] = useState("0px")
     const [fontWeight, setFontWeight] = useState(400)
     const [fontDecoration, setFontDecoration] = useState("none")
 
@@ -22,7 +22,18 @@ export default function SwatchView(props) {
     const [displayMetric, setDisplayMetric] = useState("wcag21")      // [L*d65, deltaPhiStar, wcag, ]
 
     useEffect(() => {
+        console.log(props.model)
+        setModel(props.model)
+        window.addEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+        window.addEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        return () => {
+            window.removeEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+            window.removeEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        }
+    }, [])
 
+    useEffect(() => {
+        
         if (displayMetric === "none") setValue("")
         if (displayMetric === "wcag21") setValue(props.model.color.contrast(new Color("#FFFFFF"), "WCAG21").toFixed(1))
         if (displayMetric === "apcalc_white") setValue(props.model.color.contrast(new Color("#FFFFFF"), "APCA").toFixed(1))
@@ -32,6 +43,7 @@ export default function SwatchView(props) {
     }, [displayMetric]);
 
     useEffect(() => {
+        
         if (contrastStandard === "wcag21") {
             const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
             setWCAG(WCAGRatioOnWhite)
@@ -48,25 +60,12 @@ export default function SwatchView(props) {
         if (contrastStandard === "apca") {
             setFontWeight(700)
             setFontSize(17.5)
-            // const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
-            // const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
-
 
             const LcW = Math.round(props.model.color.contrast(new Color("white"), "APCA"))
             const LcK = Math.round(props.model.color.contrast(new Color("black"), "APCA"))
 
-            // console.log(`K: ${LcK}/${aaa}`)
-            // console.log(`W: ${LcW}/${bbb}`)
-
-
-            // let onWhite = Math.abs( props.model.color.as("hex").contrast("white", "APCA"));
-            // let onBlack = Math.abs( props.model.color.as("hex").contrast("black", "APCA"));
-            // console.log(onWhite, onBlack)
-
-
             setFontColor((Math.abs(LcW) >= 60) ? "#FFFFFF" : "#000000")
             if ((Math.abs(LcW) >= 60)) setFontSize("16px")
-            // if ((Math.abs(LcW) >= 60)) setFontWeight(700)
             if ((Math.abs(LcW) >= 75)) setFontSize("12px")
 
             if ((props.model.priority > -1) && (Math.abs(LcW) < 60 && Math.abs(LcK) < 60)) {
@@ -81,54 +80,6 @@ export default function SwatchView(props) {
 
         }
     }, [contrastStandard])
-
-    useEffect(() => {
-        setModel(props.model)
-
-        // console.log(props.model)
-        // console.log("ROOT?", props.model.root)
-        const fff = props.model.root ? props.model.root : "srgb"
-        // console.log(fff)
-        // console.log(">>>", props.model.color.to("lch"))
-        // console.log(">>>", props.model.color.to(props.model.root).toString({precision: 2}))
-        // console.log("XXX:", props.model.value)
-
-        // const LcW = Math.round(props.model.color.contrast(new Color("white"), "APCA"))
-        // const LcK = Math.round(props.model.color.contrast(new Color("black"), "APCA"))
-
-        // setValue(dpsConstrast(100, parseFloat(props.model.color.lab_d65.l).toFixed(2)))
-        // setValue(Math.round(props.model.color.contrast(new Color("white"), "APCA")))
-        // setValue(calcAPCA("#FFFFFF", props.model.color.as("hex")).toFixed(1))
-        // setValue(calcAPCA("#000000", props.model.color.as("hex")).toFixed(1))
-        // setValue("")
-
-
-
-        // qualityControl(props.model)
-        // const WCAGRatioOnWhite = props.model.color.contrast(new Color("#FFFFFF"), "WCAG21")
-        // setWCAG(WCAGRatioOnWhite)
-        // setStyle({
-        //     backgroundColor: props.model.color.as("hex"),
-        //     color: (WCAGRatioOnWhite > 3.0) ? "#E5EEFC" : "#000000",
-        //     fontSize: '16px',
-        //     fontWeight: (WCAGRatioOnWhite >= 3.0 && WCAGRatioOnWhite < 4.5) ? 700 : 400,
-        //     width: 50,
-        //     height: 50,
-        //     display: 'flex',
-        //     alignItems: 'center',
-        //     justifyContent: 'center',
-        //     textDecoration: (props.model.priority > -1) ? 'underline' : 'none'
-        // })
-
-        window.addEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
-        window.addEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
-
-        return () => {
-            document.removeEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
-            document.removeEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
-        }
-
-    }, [])
 
     const selectedSwatchDisplayOptionEventHandler = (event) => {
         setDisplayMetric(event.detail.value)

@@ -2,14 +2,15 @@ import ColumnModel from "./ColumnModel";
 
 export default class PaletteModel {
 
-    constructor(colors) {
-        this.columns = [];
-        this.init = (colors) => {
-            colors.forEach((colors, index) => {
-                this.columns.push(new ColumnModel(colors, index));
+    columns = []
+
+    constructor(args) {
+        this.init = (args) => {
+            args.forEach((arg, index) => {
+                this.columns.push(new ColumnModel(index, arg.semantic, arg.values));
             })
         }
-        this.init(Array.isArray(colors) ? colors : []);
+        this.init(Array.isArray(args) ? args : []);
     }
 
 }

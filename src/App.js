@@ -21,7 +21,7 @@ const swatchDisplayOptions = [
 
 function App() {
   const [selectedContrastOption, setSelectedConstrastOption] = useState(contrastAlgorithmOptions[0]);
-  const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[0]);
+  const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[2]);
 
   useEffect(() => {
     document.onkeydown = (event => onKeyDownEventHandler(event));
@@ -47,40 +47,55 @@ function App() {
 
   }
 
-  const palette = new PaletteModel([
-    [new ColorModel("oklch(49.25% 0.121 237.21)")],
-    [new ColorModel("lch(59.46% 86.13 59.27)")],
-    [new ColorModel("#7b6747"), new ColorModel("oklab(35.512% 0.00687 0.03516)")],
-    [new ColorModel("#007c00")],
-    [new ColorModel("#d80000")],
-    [new ColorModel("#FFCF3D")],
-    [new ColorModel("#FD6905")],
-    [new ColorModel("#035ef9")],
-    [new ColorModel("#0A66D8")],
-    [new ColorModel("#7F7F7F")]
+  const palette_og = new PaletteModel([
+    { semantic: "primary", values: [new ColorModel("oklch(49.25% 0.121 237.21)")] },
+    { semantic: "primary", values: [new ColorModel("lch(59.46% 86.13 59.27)")] },
+    { semantic: "primary", values: [new ColorModel("#7b6747"), new ColorModel("oklab(35.512% 0.00687 0.03516)")] },
+    { semantic: "primary", values: [new ColorModel("#007c00")] },
+    { semantic: "primary", values: [new ColorModel("#d80000")] },
+    { semantic: "primary", values: [new ColorModel("#FFCF3D")] },
+    { semantic: "primary", values: [new ColorModel("#FD6905")] },
+    { semantic: "primary", values: [new ColorModel("#035ef9")] },
+    { semantic: "primary", values: [new ColorModel("#0A66D8")] },
+    { semantic: "primary", values: [new ColorModel("#7F7F7F")] },
   ])
 
-  const Xpalette = [
-    {semantic:"primary", values:["oklch(49.25% 0.121 237.21)"]},
-    
-    ["lch(59.46% 86.13 59.27)"],
-    ["#7b6747", "oklab(35.512% 0.00687 0.03516)"],
-    ["#007c00"],
-    ["#d80000"],
-    ["#FFCF3D"],
-    ["#FD6905"],
-    ["#035ef9"],
-    ["#0A66D8"],
-    ["#7F7F7F"]
+  const palette_a = [
+    { semantic: "primary", values: ["#6A6A6A"] },
+    { semantic: "secondary", values: ["#6A6A6A"] },
+    { semantic: "tertiary", values: ["#6A6A6A"] },
+    { semantic: "positive", values: ["#6A6A6A"] },
+    { semantic: "negative",values: ["#6A6A6A"] },
+    { semantic: "highlight", values: ["#6A6A6A"] },
+    { semantic: "attention", values: ["#6A6A6A"] },
+    { semantic: "info", values: ["#6A6A6A"] },
+    { semantic: "system", values: ["#6A6A6A"] },
+    { semantic: "neutral", values: ["#6A6A6A"] },
+
+  ]
+
+  // Note that primary takes an oklch definition in CSS Color and spreads to white/black on the primary row/colum.
+  // And how secondary takes an lch definition and spreads to white/black.
+  // Further note that tertiary takes a hex and an oklab and spreads. Because the first item in the array is a hex, it renders in hex despite the second object being oklab
+  
+  const palette_b = [
+    { semantic: "primary", values: ["oklch(49.25% 0.121 237.21)"] },
+    { semantic: "secondary", values: ["lch(59.46% 86.13 59.27)"] },
+    { semantic: "tertiary", values: ["#7b6747", "oklab(35.512% 0.00687 0.03516)"] },
+    { semantic: "positive", values: ["#007c00"] },
+    { semantic: "negative", values: ["#d80000"] },
+    { semantic: "highlight", values: ["#FFCF3D"] },
+    { semantic: "attention", values: ["#FD6905"] },
+    { semantic: "info", values: ["#035ef9"] },
+    { semantic: "system", values: ["#0A66D8"] },
+    { semantic: "neutral", values: ["#7F7F7F"] },
   ]
 
   return (
     <div className="App">
-      <PaletteView model={palette} />
-
+      <PaletteView model={new PaletteModel(palette_b)} />
       <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} />
       <Select defaultValue={selectedSwatchDisplayOption} onChange={onSelectSwatchDisplayChangeHandler} options={swatchDisplayOptions} />
-
     </div>
   );
 }

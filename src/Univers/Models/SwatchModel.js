@@ -4,8 +4,11 @@ export default class SwatchModel {
 
     constructor(weight, color, origin, priority, root) {
 
+        // id = null
+        // value = null
+
         if (typeof color === 'string' || color instanceof String) {
-            this._color = new ColorModel(color)
+            this.value = this._color.to(this._color.space.id).toString()
         } else if (color instanceof ColorModel) {
             this._color = color;
         }
