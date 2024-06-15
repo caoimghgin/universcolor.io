@@ -4,15 +4,12 @@ export default class SwatchModel {
 
     constructor(weight, color, origin, priority, root) {
 
-        // id = null
-        // value = null
-
         if (typeof color === 'string' || color instanceof String) {
             this.value = this._color.to(this._color.space.id).toString()
         } else if (color instanceof ColorModel) {
             this._color = color;
         }
-
+        
         this.id = parseInt(weight)
         this.value = this._color.to(this._color.space.id).toString()
         this.weight = weight;
@@ -20,6 +17,7 @@ export default class SwatchModel {
         this.origin = origin;
         this.root = root;
         this.wideGamut = !this.color.inGamut("srgb");
+
     }
 
     get color() {

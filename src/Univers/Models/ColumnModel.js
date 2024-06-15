@@ -26,6 +26,7 @@ export default class ColumnModel {
             }
 
             this.space = values ? values[0].space.id : null
+
             values.forEach((color, idx) => {
                 const luminance = color.lab.l;
                 const weight = luminanceToWeight(luminance);
@@ -81,15 +82,18 @@ export default class ColumnModel {
         this.swatches.forEach((swatch, idx) => {
             if (swatch === null) {
                 let target = targets[idx]
+                
                 target = target !== 50 ? target : target - 0.50;
                 target = target !== 60 ? target : target - 1.50;
                 target = target !== 65 ? target : target - 2.00;
-                target = target !== 70 ? target : target - 1.50;
 
+                target = target !== 70 ? target : target - 1.50;
                 target = target !== 97.5 ? target : target - 0.75;
                 target = target !== 95.0 ? target : target - 1.00;
+
                 target = target !== 90.0 ? target : target - 1.00;
                 target = target !== 5.0 ? target : target + 0.25;
+
                 const color = candidateSwatches.reduce(function (prev, curr) {
                     return Math.abs(curr.lab_d65.l - target) < Math.abs(prev.lab_d65.l - target)
                         ? curr
@@ -101,16 +105,6 @@ export default class ColumnModel {
                 this.swatches[idx] = new SwatchModel(weight, color, space, null);
             }
         });
-    }
-
-    tweekTarget(target) {
-        target = target !== 50 ? target : target - 0.50;
-        target = target !== 45 ? target : target - 2.25;
-        target = target !== 97.5 ? target : target - 0.75;
-        target = target !== 95.0 ? target : target - 1.50;
-        target = target !== 90.0 ? target : target - 1.00;
-        target = target !== 5.0 ? target : target + 0.25;
-        return target
     }
 
     getColors(space) {
