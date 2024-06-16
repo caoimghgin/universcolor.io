@@ -37,12 +37,10 @@ function App() {
   }, [selectedSwatchDisplayOption])
 
   const onSelectConstrastChangeHandler = (event) => {
-    console.log(event)
     setSelectedConstrastOption(event)
   }
 
   const onSelectSwatchDisplayChangeHandler = (event) => {
-    console.log(event)
     setSelectedSwatchDisplayOption(event)
 
   }
@@ -74,7 +72,6 @@ function App() {
 }
 
 function generateMidtones() {
-  console.log("LENGTH:", midtones.length)
 
   const max = midtones.reduce(function (prev, current) {
     return (prev && prev.luminance_d65 > current.luminance_d65) ? prev : current
@@ -86,9 +83,6 @@ function generateMidtones() {
 
   const avg = midtones.map(item => item.luminance_d65).reduce((p, c, _, a) => p + c / a.length, 0)
 
-  console.log("max", max)
-  console.log("min", min)
-  console.log("avg", avg)
 
 }
 
@@ -104,13 +98,9 @@ function generateMidtones_550() {
 
   const avg = midtones050.map(item => item.luminance_d65).reduce((p, c, _, a) => p + c / a.length, 0)
 
-  console.log("max", max)
-  console.log("min", min)
-  console.log("avg", avg)
 }
 
 const onKeyDownEventHandler = (event) => {
-  console.log("onKeyDownEventHandler", event)
   if (event.repeat) return;
   if (event.key === "3") { console.log("broadcast out that somebody wants to see 3:1") }
   if (event.key === "4") { console.log("broadcast out that somebody wants to see 4.5:1") }

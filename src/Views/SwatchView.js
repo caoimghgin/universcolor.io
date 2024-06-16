@@ -12,14 +12,12 @@ export default function SwatchView(props) {
 
     useEffect(() => {
         setModel(props.model)
+        console.log(props.model)
     }, [])
 
     useEffect(() => {
         if (!model || !model.color) return
-        console.log(model.value)
-       setBackground(model.value)
-    // setBackground(model.color.to(model.root).toString({precision: 2}))
-
+        setBackground(model.destination.value)
     }, [model])
 
     const SwatchViewStyled = styled.div`
@@ -38,10 +36,10 @@ export default function SwatchView(props) {
 `;
 
     return (
-
-        <SwatchViewStyled>Z</SwatchViewStyled>
+        // <div>X</div>
+        <SwatchViewStyled>XXXX</SwatchViewStyled>
         // <SwatchViewStyled key={props.model.id ? props.model.id : "42"} onMouseEnter={onMouseEnterHandler} onClick={onClickHandler}>
-        //     {value}
+        //     
         //     <SwatchViewDetailStyled />
         //     {/* {parseFloat(props.model.color.lab_d65.l).toFixed(2)} */}
         //     {/* {WCAG.toFixed(2)} */}

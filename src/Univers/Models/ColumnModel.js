@@ -15,7 +15,9 @@ export default class ColumnModel {
 
         this.id = index
         this.semantic = semantic
-        this.space = null
+        this.destinationSpace = null
+
+        console.log(values)
 
         this.init = (values) => {
             this.id = index
@@ -25,44 +27,39 @@ export default class ColumnModel {
                 values = values.map(value => new ColorModel(value))
             }
 
-            this.space = values ? values[0].space.id : null
+            this.destinationSpace = values ? values[0].space.id : null
+            console.log("VALUES TO COLORS:", values)
 
-            values.forEach((color, idx) => {
-                const luminance = color.lab.l;
-                const weight = luminanceToWeight(luminance);
-                const space = color.space.id;
-                const index = weights.findIndex(item => item === weight);
-                this.swatches[index] = new SwatchModel(weight, color, space, idx, index)
-                this.swatches[index].color = null
+            values.forEach((color, index) => {
+                console.log("A", color)
+                const swatchModel = new SwatchModel(
+                    {
+                        color: color,
+                        destinationSpace: this.destinationSpace,
+                        priority: (index === 0 ? 1 : 0)
+                    }
+                )
+                console.log(color, swatchModel)
+                this.swatches[swatchModel.id] = swatchModel
+
             });
-
-            //I'd like this constructor to only receive string values and instantiate what it needs here.
-            // this.space = new SwatchModel(colors[0]).space.id
 
         };
 
         this.init(Array.isArray(values) ? values : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
-        this.swatches.forEach(swatch => swatch.root = this.space)
     }
 
-    // valuesToColorMode
-
     insertBlackAndWhite() {
+
         if (this.swatches[0] === null) {
-            const color = new ColorModel('lab', [100.0, 0.0, 0.0]);
-            const weight = luminanceToWeight(color.lab.l);
-            const space = color.space.id;
-            const swatch = new SwatchModel(weight, color, space, null);
-            this.swatches[0] = swatch
+            const color = new ColorModel("White");
+            this.swatches[0] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
         }
         if (this.swatches[21] === null) {
-            const color = new ColorModel('lab', [0.0, 0.0, 0.0]);
-            const weight = luminanceToWeight(color.lab.l);
-            const space = color.space.id
-            const swatch = new SwatchModel(weight, color, space, null);
-            this.swatches[21] = swatch
+            const color = new ColorModel("Black");
+            this.swatches[21] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
         }
     }
 
@@ -72,6 +69,7 @@ export default class ColumnModel {
         const tween = this.swatches.filter(swatch => swatch);
 
         for (let i = 0; i + 1 < tween.length; i++) {
+
             const start = tween[i].color;
             const stop = tween[i + 1].color;
             const range = ColorModel.range(start, stop, { space: this.stepsSpace, outputSpace: this.stepsSpace });
@@ -82,7 +80,7 @@ export default class ColumnModel {
         this.swatches.forEach((swatch, idx) => {
             if (swatch === null) {
                 let target = targets[idx]
-                
+
                 target = target !== 50 ? target : target - 0.50;
                 target = target !== 60 ? target : target - 1.50;
                 target = target !== 65 ? target : target - 2.00;
@@ -99,10 +97,8 @@ export default class ColumnModel {
                         ? curr
                         : prev;
                 });
-                const space = color.space.id;
-                const luminance = color.lab_d65.l;
-                const weight = luminanceToWeight(luminance);
-                this.swatches[idx] = new SwatchModel(weight, color, space, null);
+                this.swatches[idx] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
+
             }
         });
     }

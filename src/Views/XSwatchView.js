@@ -94,25 +94,10 @@ export default function XSwatchView(props) {
         setContrastStandard(event.detail.value)
     }
 
-    const onMouseEnterHandler = () => {
-        // console.log(model.color.as("hex"))
-    }
 
     const onClickHandler = () => {
-        // const color = model.getColor()
-
-        // const LcW = Math.round(calcAPCA("#FFFFFF", props.model.color.as("hex")))
-        // const LcK = Math.round(calcAPCA("#000000", props.model.color.as("hex")))
-        // console.log(`white:${LcW} black:${LcK}`)
-        // console.log(model, model.color.as("hex"))
-
-        model.color = null
-
         console.log(model.color.to("oklch").toString({precision: 2}))
         console.log(model.color.to("lch").toString({precision: 2}))
-
-        // console.log("getColor", model.getColor())
-
     }
 
     const SwatchViewDetailStyled = styled.div`
@@ -175,7 +160,6 @@ function qualityControl(model) {
     if (luminanceToWeight(model.color.lab.l) === "500") {
         const wcagOnWhite = model.color.contrast(new Color("#FFFFFF"), "WCAG21")
         const wcagOnBlack = model.color.contrast(new Color("#000000"), "WCAG21")
-        // console.log(`${value} -> color-js(L* ${clr.lab_d65.l.toFixed(2)}) *** W: ${wcagOnWhite.toFixed(2)}/K: ${wcagOnBlack.toFixed(2)}`)
     }
 
 }

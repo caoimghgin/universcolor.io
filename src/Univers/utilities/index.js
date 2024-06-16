@@ -37,6 +37,7 @@ export const colorToHex = (color) => {
     return rgbToHex(percentToEightBit(toCoords(gamutMap(color, "srgb"))))
 }
 
+// Takes a the L* of CIEL*a*b* in D65
 export const luminanceToWeight = (luminance) => {
     const value = luminanceToTarget(luminance)
     const result = String((100 - value) * 10).padStart(3, '0');
