@@ -1,34 +1,26 @@
 import ColorModel from "./ColorModel";
+import { luminanceToWeight } from "../utilities";
+import { weights } from "../constants";
 
 export default class SwatchModel {
 
-    constructor(weight, color, origin, priority, root) {
+    constructor(args) {
 
-        // id = null
-        // value = null
+        const { color, destinationSpace, priority } = args
 
-        if (typeof color === 'string' || color instanceof String) {
-            this.value = this._color.to(this._color.space.id).toString()
-        } else if (color instanceof ColorModel) {
-            this._color = color;
+        if (color) {
+            this.color = color;
+            this.value = color.to(color.space.id).toString()
+            this.weight = luminanceToWeight(color.lab.l)
+            this.origin = {value: color.to(color.space.id).toString(), space: color.space.id}
+            this.destination = {value: color.to(destinationSpace).toString(), space: destinationSpace}
+            this.id = weights.findIndex(item => item === this.weight);
+            this.priority = (priority ? priority : -1)
         }
 
-        this.id = parseInt(weight)
-        this.value = this._color.to(this._color.space.id).toString()
-        this.weight = weight;
-        this.priority = priority === null ? -1 : priority;
-        this.origin = origin;
-        this.root = root;
-        this.wideGamut = !this.color.inGamut("srgb");
+        // console.log(this.destination.value)
+        // console.log("-->", this)
     }
 
-    get color() {
-        if (!this._color) this._color = new ColorModel(this.value) 
-        return this._color
-    }
 
-    set color(value) {
-        this._color = value;
-    }
 }
-
