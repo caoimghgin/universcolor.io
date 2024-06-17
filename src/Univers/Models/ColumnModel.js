@@ -28,10 +28,8 @@ export default class ColumnModel {
             }
 
             this.destinationSpace = values ? values[0].space.id : null
-            console.log("VALUES TO COLORS:", values)
 
             values.forEach((color, index) => {
-                console.log("A", color)
                 const swatchModel = new SwatchModel(
                     {
                         color: color,
@@ -40,8 +38,7 @@ export default class ColumnModel {
                     }
                 )
                 console.log(color, swatchModel)
-                this.swatches[swatchModel.id] = swatchModel
-
+                this.swatches[swatchModel.index] = swatchModel
             });
 
         };

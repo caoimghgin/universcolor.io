@@ -4,15 +4,14 @@ import styled from '@emotion/styled/macro';
 export default function SwatchView(props) {
 
     const [model, setModel] = useState(null)
-    const [fontColor, setFontColor] = useState("#FFFFFF")
-    const [fontSize, setFontSize] = useState("0px")
+    const [fontSize, setFontSize] = useState("22px")
     const [fontWeight, setFontWeight] = useState(400)
     const [fontDecoration, setFontDecoration] = useState("none")
     const [background, setBackground] = useState("#F1F1F1")
+    const [color, setColor] = useState("#FFFFFF")
 
-    useEffect(() => {
+    useEffect(() => { 
         setModel(props.model)
-        console.log(props.model)
     }, [])
 
     useEffect(() => {
@@ -20,8 +19,25 @@ export default function SwatchView(props) {
         setBackground(model.destination.value)
     }, [model])
 
+    const SwatchViewDetailStyled = styled.div`
+    visibility: hidden;
+    display: none;
+    opacity:0;
+    color: black;
+    font-weight: 400;
+    font-size: 14pt;
+    background: ${background};
+    transition:visibility 0.3s linear,opacity 0.3s linear;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 80px;
+    width:100px;
+    height:100px;
+    filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.25)); 
+`
+
     const SwatchViewStyled = styled.div`
-        display: 'flex';
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -31,19 +47,21 @@ export default function SwatchView(props) {
         font-weight: ${fontWeight};
         background: ${background};
         font-size: ${fontSize};
-        color: ${fontColor};
+        color: ${color};
         text-decoration: ${fontDecoration};
+        &:hover { 
+            ${SwatchViewDetailStyled} {
+                opacity:1;
+                visibility: visible;
+                display: inline-block;
+                position: absolute;
+        };
 `;
 
     return (
-        // <div>X</div>
-        <SwatchViewStyled>XXXX</SwatchViewStyled>
-        // <SwatchViewStyled key={props.model.id ? props.model.id : "42"} onMouseEnter={onMouseEnterHandler} onClick={onClickHandler}>
-        //     
-        //     <SwatchViewDetailStyled />
-        //     {/* {parseFloat(props.model.color.lab_d65.l).toFixed(2)} */}
-        //     {/* {WCAG.toFixed(2)} */}
-        // </SwatchViewStyled>
+        <SwatchViewStyled>X
+        <SwatchViewDetailStyled>X</SwatchViewDetailStyled>
+        </SwatchViewStyled>
     )
 
 }
