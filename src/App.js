@@ -20,6 +20,7 @@ const swatchDisplayOptions = [
 ];
 
 function App() {
+  const [controls, setControls] = useState({a:"A", b:"B", c:"C"});
   const [selectedContrastOption, setSelectedConstrastOption] = useState(contrastAlgorithmOptions[0]);
   const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[2]);
 
@@ -28,16 +29,21 @@ function App() {
     return () => document.removeEventListener("onkeydown", onKeyDownEventHandler)
   }, [])
 
-  useEffect(() => {
-    dispatchEvent(new CustomEvent("selectedContrastOptionEvent", { detail: selectedContrastOption }));
-  }, [selectedContrastOption])
+  // useEffect(() => {
+  //   dispatchEvent(new CustomEvent("selectedContrastOptionEvent", { detail: selectedContrastOption }));
+  // }, [selectedContrastOption])
 
-  useEffect(() => {
-    dispatchEvent(new CustomEvent("selectedSwatchDisplayOptionEvent", { detail: selectedSwatchDisplayOption }));
-  }, [selectedSwatchDisplayOption])
+  // useEffect(() => {
+  //   dispatchEvent(new CustomEvent("selectedSwatchDisplayOptionEvent", { detail: selectedSwatchDisplayOption }));
+  // }, [selectedSwatchDisplayOption])
 
   const onSelectConstrastChangeHandler = (event) => {
     setSelectedConstrastOption(event)
+    console.log(event)
+    // console.log("I reset controls...")
+    const x = {...controls}
+    x.a = event.value
+    setControls(x)
   }
 
   const onSelectSwatchDisplayChangeHandler = (event) => {
@@ -64,7 +70,7 @@ function App() {
 
   return (
     <div className="App">
-      <PaletteView model={new PaletteModel(data)} />
+      <PaletteView model={new PaletteModel(data)} app={controls}/>
       <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} />
       <Select defaultValue={selectedSwatchDisplayOption} onChange={onSelectSwatchDisplayChangeHandler} options={swatchDisplayOptions} />
     </div>

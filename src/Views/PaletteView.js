@@ -7,7 +7,7 @@ export default function PaletteView(props) {
     return (
         <div className="PaletteView">
             <WeightsView model={props.model.columns[0]}/>
-            {props.model.columns.map((column, index) => <ColumnView key={index} model={column} />)}
+            {props.model.columns.map((column, index) => <ColumnView key={index} model={column} app={props.app} />)}
             <LuminositiesView/>
         </div>
     )

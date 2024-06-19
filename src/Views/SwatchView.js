@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled/macro';
 
 export default function SwatchView(props) {
+    console.log("SwatchView:", props)
 
     const [model, setModel] = useState(null)
     const [fontSize, setFontSize] = useState("22px")
@@ -9,15 +10,54 @@ export default function SwatchView(props) {
     const [fontDecoration, setFontDecoration] = useState("none")
     const [background, setBackground] = useState("#F1F1F1")
     const [color, setColor] = useState("#FFFFFF")
+    const [contrastStandard, setContrastStandard] = useState("apca")
+    const [displayMetric, setDisplayMetric] = useState("wcag21")      // [L*d65, deltaPhiStar, wcag, ]
+    const [value, setValue] = useState("")      // [L*d65, deltaPhiStar, wcag, ]
+    const [app, setApp] = useState(props.app)
 
-    useEffect(() => { 
+    useEffect(() => {
+        if (!props.model) return
+        // console.log("APP:", app)
+
         setModel(props.model)
+        setApp(props.app)
+
+        // window.addEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+        // window.addEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        // return () => {
+        //     window.removeEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
+        //     window.removeEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
+        // }
     }, [])
+
+    useEffect(() => {
+        console.log("-->", app)
+    }, [app])
 
     useEffect(() => {
         if (!model || !model.color) return
         setBackground(model.destination.value)
+        // console.log(model.color.foo)
     }, [model])
+
+    useEffect(() => {
+        if (!props.model) return
+        if (displayMetric === "none") setValue("")
+        // if (displayMetric === "wcag21") setValue(model.color.wcag_white) 
+        // if (displayMetric === "apcalc_white") setValue(model.color.apca_white) 
+        // if (displayMetric === "apcalc_black") setValue(model.color.apca_black)
+        // if (displayMetric === "ciel*d65") setValue(model.color.lab_d65.l.toFixed(1))
+    }, [displayMetric]);
+
+    const selectedContrastOptionEventHandler = (event) => {
+        console.log("selectedContrastOptionEventHandler")
+        setContrastStandard(event.detail.value)
+    }
+
+    const selectedSwatchDisplayOptionEventHandler = (event) => {
+        console.log("selectedSwatchDisplayOptionEventHandler")
+        setDisplayMetric(event.detail.value)
+    }
 
     const SwatchViewDetailStyled = styled.div`
     visibility: hidden;
@@ -58,9 +98,12 @@ export default function SwatchView(props) {
         };
 `;
 
+function onClickHandler(event) {
+}
+
     return (
-        <SwatchViewStyled>X
-        <SwatchViewDetailStyled>X</SwatchViewDetailStyled>
+        <SwatchViewStyled onClick={onClickHandler}>{props.app.a}
+        <SwatchViewDetailStyled></SwatchViewDetailStyled>
         </SwatchViewStyled>
     )
 

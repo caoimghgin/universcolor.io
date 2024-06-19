@@ -17,8 +17,6 @@ export default class ColumnModel {
         this.semantic = semantic
         this.destinationSpace = null
 
-        console.log(values)
-
         this.init = (values) => {
             this.id = index
             this.swatches = Array.apply(null, Array(targets.length)).map(item => null)
@@ -37,7 +35,6 @@ export default class ColumnModel {
                         priority: (index === 0 ? 1 : 0)
                     }
                 )
-                console.log(color, swatchModel)
                 this.swatches[swatchModel.index] = swatchModel
             });
 
