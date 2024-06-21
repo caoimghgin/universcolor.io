@@ -3,12 +3,11 @@ import { colorToHex, percentToEightBit, toCoords, gamutMap, rgbObject } from '..
 
 export default class ColorModel extends Color {
 
-            // model.color.contrast()
+        // model.color.contrast()
         // if (displayMetric === "wcag21") setValue(model.color.contrast(new Color("White"), "WCAG21").toFixed(1))
         // if (displayMetric === "apcalc_white") setValue(props.model.color.contrast(new Color("#FFFFFF"), "APCA").toFixed(1))
         // if (displayMetric === "apcalc_black") setValue(props.model.color.contrast(new Color("#000000"), "APCA").toFixed(1))
         // if (displayMetric === "ciel*d65") setValue(parseFloat(props.model.color.lab_d65.l).toFixed(1))
-
 
     constructor(...args) {
         super(...args);

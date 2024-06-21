@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled/macro';
 
 export default function SwatchView(props) {
-    console.log("SwatchView:", props)
 
     const [model, setModel] = useState(null)
     const [fontSize, setFontSize] = useState("22px")
@@ -11,43 +10,88 @@ export default function SwatchView(props) {
     const [background, setBackground] = useState("#F1F1F1")
     const [color, setColor] = useState("#FFFFFF")
     const [contrastStandard, setContrastStandard] = useState("apca")
-    const [displayMetric, setDisplayMetric] = useState("wcag21")      // [L*d65, deltaPhiStar, wcag, ]
-    const [value, setValue] = useState("")      // [L*d65, deltaPhiStar, wcag, ]
-    const [app, setApp] = useState(props.app)
+    const [delegate, setDelegate] = useState(props.delegate)
+    const [displayContrast, setDisplayContrast] = useState("wcag21")
+    const [displayValue, setDisplayValue] = useState(null)      // [L*d65, deltaPhiStar, wcag, ]
 
     useEffect(() => {
-        if (!props.model) return
-        // console.log("APP:", app)
-
-        setModel(props.model)
-        setApp(props.app)
-
-        // window.addEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
-        // window.addEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
-        // return () => {
-        //     window.removeEventListener("selectedContrastOptionEvent", selectedContrastOptionEventHandler)
-        //     window.removeEventListener("selectedSwatchDisplayOptionEvent", selectedSwatchDisplayOptionEventHandler)
-        // }
+        if (props.model) setModel(props.model)
     }, [])
 
-    useEffect(() => {
-        console.log("-->", app)
-    }, [app])
+    // useEffect(() => {
+    //     // const a = JSON.stringify(model)
+    //     // const b = JSON.stringify({...props.model, ...props.delegate})
+    //     // if (a === b) return
+    //     setModel(props.model)
+    //     // console.log("update...")
+
+    //     // if (model === {...props.model, ...props.delegate}) return 
+    //     // if (!props.model || !props.delegate) return
+    //     // const {model, delegate} = props
+    //     // const result = {...props.model, ...props.delegate}
+    //     // if (model !== result) {
+    //     //     console.log(model)
+    //     //     setModel({...props.model, ...props.delegate})
+    //     // }
+        
+    //     // setDelegate(props.delegate)
+    // })
+
+    // useEffect(() => {
+    //     if (displayContrast !== delegate.displayContrast) updateDisplayContrast()
+    //     if (displayValue !== delegate.displayValue) updateDisplayValue()
+    // }, [delegate])
 
     useEffect(() => {
         if (!model || !model.color) return
         setBackground(model.destination.value)
-        // console.log(model.color.foo)
+        // updateDisplayValue()
     }, [model])
 
-    useEffect(() => {
-        if (!props.model) return
-        if (displayMetric === "none") setValue("")
-        // if (displayMetric === "wcag21") setValue(model.color.wcag_white) 
-        // if (displayMetric === "apcalc_white") setValue(model.color.apca_white) 
-        // if (displayMetric === "apcalc_black") setValue(model.color.apca_black)
-        // if (displayMetric === "ciel*d65") setValue(model.color.lab_d65.l.toFixed(1))
-    }, [displayMetric]);
+    const updateDisplayContrast = () => {
+
+        // const { displayContrast } = delegate
+
+        // switch (displayContrast) {
+        //     case "wcag21":
+        //         setDisplayValue(displayContrast)
+        //         break;
+        //     case "apca":
+        //         setDisplayValue(displayContrast)
+        //         break;
+        //     default:
+        //         setDisplayValue(displayContrast)
+        // }
+    }
+
+    const updateDisplayValue = () => {
+
+        // const { displayValue } = model.displayValue
+        // console.log(model)
+        return
+
+        if (!model) return
+
+        switch (displayValue) {
+            case "none":
+                setDisplayValue("")
+                break;
+            case "wcag21":
+                setDisplayValue(model.color.wcag)
+                break;
+            case "ciel*d65":
+                setDisplayValue((model.color.lab_d65.l).toFixed(1))
+                break;
+            case "apcalc_white":
+                setDisplayValue(model.color.apca_white)
+                break;
+            case "apcalc_black":
+                setDisplayValue(model.color.apca_black)
+                break;
+            default:
+                setDisplayValue("XXX")
+        }
+    }
 
     const selectedContrastOptionEventHandler = (event) => {
         console.log("selectedContrastOptionEventHandler")
@@ -56,7 +100,7 @@ export default function SwatchView(props) {
 
     const selectedSwatchDisplayOptionEventHandler = (event) => {
         console.log("selectedSwatchDisplayOptionEventHandler")
-        setDisplayMetric(event.detail.value)
+        // setDisplayMetric(event.detail.value)
     }
 
     const SwatchViewDetailStyled = styled.div`
@@ -98,13 +142,11 @@ export default function SwatchView(props) {
         };
 `;
 
-function onClickHandler(event) {
-}
-
+    function onClickHandler(event) {
+    }
     return (
-        <SwatchViewStyled onClick={onClickHandler}>{props.app.a}
-        <SwatchViewDetailStyled></SwatchViewDetailStyled>
+        <SwatchViewStyled onClick={onClickHandler}>{displayValue}
+            <SwatchViewDetailStyled></SwatchViewDetailStyled>
         </SwatchViewStyled>
     )
-
 }

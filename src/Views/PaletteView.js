@@ -3,11 +3,11 @@ import WeightsView from "./WeightsView"
 import LuminositiesView from "./LuminositiesView"
 
 export default function PaletteView(props) {
-    if (!props.model) return
+    const { delegate } = props;
     return (
         <div className="PaletteView">
             <WeightsView model={props.model.columns[0]}/>
-            {props.model.columns.map((column, index) => <ColumnView key={index} model={column} app={props.app} />)}
+            {props.model.columns.map((model, index) => <ColumnView key={index} model={model} delegate={delegate} />)}
             <LuminositiesView/>
         </div>
     )
