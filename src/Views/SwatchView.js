@@ -44,7 +44,10 @@ export default function SwatchView(props) {
 
 
     const updateDisplayStyle = () => {
+        
+        // Display user input values with underlines 
         if (model.priority > 0) setFontDecoration("underline")
+            
     }
 
     const updateDisplayValue = () => {
