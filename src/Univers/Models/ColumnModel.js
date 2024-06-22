@@ -27,13 +27,11 @@ export default class ColumnModel {
             this.destinationSpace = values ? values[0].space.id : null
 
             values.forEach((color, index) => {
-                const swatchModel = new SwatchModel(
-                    {
-                        color: color,
-                        destinationSpace: this.destinationSpace,
-                        priority: (index === 0 ? 1 : 0)
-                    }
-                )
+                const swatchModel = new SwatchModel({
+                    color: color,
+                    destinationSpace: this.destinationSpace,
+                    priority: (values.length - index)
+                })
                 this.swatches[swatchModel.index] = swatchModel
             });
 
@@ -42,6 +40,7 @@ export default class ColumnModel {
         this.init(Array.isArray(values) ? values : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
+
     }
 
     insertBlackAndWhite() {

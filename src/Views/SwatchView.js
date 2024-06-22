@@ -23,13 +23,13 @@ export default function SwatchView(props) {
         if (!model) return
         setBackground(model.value.destination)
         updateDisplayValue()
+        updateDisplayStyle()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [model])
 
     const updateDisplayContrast = () => {
 
         // const { displayContrast } = delegate
-
         // switch (displayContrast) {
         //     case "wcag21":
         //         setDisplayValue(displayContrast)
@@ -40,6 +40,11 @@ export default function SwatchView(props) {
         //     default:
         //         setDisplayValue(displayContrast)
         // }
+    }
+
+
+    const updateDisplayStyle = () => {
+        if (model.priority > 0) setFontDecoration("underline")
     }
 
     const updateDisplayValue = () => {
