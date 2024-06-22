@@ -1,10 +1,10 @@
 import SwatchView from "./SwatchView"
 
 export default function ColumnView(props) {
-    if (!props.model) return
+    const { delegate } = props;
     return (
-        <div className="ColumnView" style={{ display: 'flex' }}>
-            {props.model.swatches.map((model, index) => <SwatchView key={index} model={model} />)}
+        <div className="ColumnView" style={{ display: 'flex' }}>            
+            {props.model.swatches.map((model, index) => <SwatchView key={index} model={model} delegate={delegate} />)}
         </div>
     )
 }

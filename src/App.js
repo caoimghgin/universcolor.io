@@ -20,51 +20,58 @@ const swatchDisplayOptions = [
 ];
 
 function App() {
+  const [appDelegate, setAppDelegate] = useState({ displayContrast: "wcag21", displayValue: "ciel*d65", a: "A" });
   const [selectedContrastOption, setSelectedConstrastOption] = useState(contrastAlgorithmOptions[0]);
   const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[2]);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
+
+    setData([
+      { index: 0, semantic: "primary", values: ["oklch(49.25% 0.121 237.21)"] },
+      { index: 1, semantic: "secondary", values: ["lch(59.46% 86.13 59.27)"] },
+      { index: 2, semantic: "tertiary", values: ["#7b6747", "oklab(35.512% 0.00687 0.03516)"] },
+      { index: 3, semantic: "positive", values: ["#007c00"] },
+      { index: 4, semantic: "negative", values: ["#d80000"] },
+      { index: 5, semantic: "highlight", values: ["#FFCF3D"] },
+      { index: 6, semantic: "attention", values: ["#FD6905"] },
+      { index: 7, semantic: "info", values: ["#035ef9"] },
+      { index: 8, semantic: "system", values: ["#0A66D8"] },
+      { index: 9, semantic: "neutral", values: ["#7F7F7F"] },
+    ])
+
     document.onkeydown = (event => onKeyDownEventHandler(event));
     return () => document.removeEventListener("onkeydown", onKeyDownEventHandler)
+
   }, [])
 
-  useEffect(() => {
-    dispatchEvent(new CustomEvent("selectedContrastOptionEvent", { detail: selectedContrastOption }));
-  }, [selectedContrastOption])
+  // useEffect(() => {
+  //   dispatchEvent(new CustomEvent("selectedContrastOptionEvent", { detail: selectedContrastOption }));
+  // }, [selectedContrastOption])
 
-  useEffect(() => {
-    dispatchEvent(new CustomEvent("selectedSwatchDisplayOptionEvent", { detail: selectedSwatchDisplayOption }));
-  }, [selectedSwatchDisplayOption])
+  // useEffect(() => {
+  //   dispatchEvent(new CustomEvent("selectedSwatchDisplayOptionEvent", { detail: selectedSwatchDisplayOption }));
+  // }, [selectedSwatchDisplayOption])
 
   const onSelectConstrastChangeHandler = (event) => {
     setSelectedConstrastOption(event)
+    setAppDelegate({ ...appDelegate, a: event.value, displayContrast: event.value });
   }
 
   const onSelectSwatchDisplayChangeHandler = (event) => {
     setSelectedSwatchDisplayOption(event)
-
+    setAppDelegate({ ...appDelegate, displayValue: event.value });
   }
 
   // Note that primary takes an oklch definition in CSS Color and spreads to white/black on the primary row/colum.
   // And how secondary takes an lch definition and spreads to white/black.
   // Further note that tertiary takes a hex and an oklab and spreads. Because the first item in the array is a hex, it renders in hex despite the second object being oklab
-  
-  const data = [
-    { semantic: "primary", values: ["oklch(49.25% 0.121 237.21)"] },
-    { semantic: "secondary", values: ["lch(59.46% 86.13 59.27)"] },
-    { semantic: "tertiary", values: ["#7b6747", "oklab(35.512% 0.00687 0.03516)"] },
-    { semantic: "positive", values: ["#007c00"] },
-    { semantic: "negative", values: ["#d80000"] },
-    { semantic: "highlight", values: ["#FFCF3D"] },
-    { semantic: "attention", values: ["#FD6905"] },
-    { semantic: "info", values: ["#035ef9"] },
-    { semantic: "system", values: ["#0A66D8"] },
-    { semantic: "neutral", values: ["#7F7F7F"] },
-  ]
+
+
 
   return (
     <div className="App">
-      <PaletteView model={new PaletteModel(data)} />
+      <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
       <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} />
       <Select defaultValue={selectedSwatchDisplayOption} onChange={onSelectSwatchDisplayChangeHandler} options={swatchDisplayOptions} />
     </div>

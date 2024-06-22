@@ -17,8 +17,6 @@ export default class ColumnModel {
         this.semantic = semantic
         this.destinationSpace = null
 
-        console.log(values)
-
         this.init = (values) => {
             this.id = index
             this.swatches = Array.apply(null, Array(targets.length)).map(item => null)
@@ -28,10 +26,8 @@ export default class ColumnModel {
             }
 
             this.destinationSpace = values ? values[0].space.id : null
-            console.log("VALUES TO COLORS:", values)
 
             values.forEach((color, index) => {
-                console.log("A", color)
                 const swatchModel = new SwatchModel(
                     {
                         color: color,
@@ -39,9 +35,7 @@ export default class ColumnModel {
                         priority: (index === 0 ? 1 : 0)
                     }
                 )
-                console.log(color, swatchModel)
-                this.swatches[swatchModel.id] = swatchModel
-
+                this.swatches[swatchModel.index] = swatchModel
             });
 
         };
