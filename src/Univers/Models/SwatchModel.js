@@ -12,7 +12,7 @@ export default class SwatchModel {
             this.value = {origin: color.to(color.space.id).toString(), destination: color.to(destinationSpace).toString()}
             this.weight = luminanceToWeight(color.lab.l)
             this.index = weights.findIndex(item => item === this.weight);
-            this.priority = (priority ? priority : -1)
+            this.priority = (priority ? priority : 0)
         }
 
     }
