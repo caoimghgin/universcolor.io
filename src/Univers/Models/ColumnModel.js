@@ -1,7 +1,6 @@
 import ColorModel from './ColorModel';
 import SwatchModel from './SwatchModel';
-import { targets, weights } from '../constants';
-import { luminanceToWeight } from '../utilities';
+import { targets } from '../constants';
 
 export default class ColumnModel {
 
@@ -9,7 +8,7 @@ export default class ColumnModel {
     semantic = null
     swatches = []
     stepsDeltaE = 1.5
-    stepsSpace = "oklch"
+    tweenColorModel = "oklch"
 
     constructor(index, semantic, values) {
 
@@ -66,9 +65,9 @@ export default class ColumnModel {
 
             const start = tween[i].color;
             const stop = tween[i + 1].color;
-            const range = ColorModel.range(start, stop, { space: this.stepsSpace, outputSpace: this.stepsSpace });
+            const range = ColorModel.range(start, stop, { space: this.tweenColorModel, outputSpace: this.tweenColorModel });
             const steps = ColorModel.steps(range, { maxDeltaE: this.stepsDeltaE });
-            steps.forEach(item => candidateSwatches.push(new ColorModel(this.stepsSpace, item.coords)));
+            steps.forEach(item => candidateSwatches.push(new ColorModel(this.tweenColorModel, item.coords)));
         }
 
         this.swatches.forEach((swatch, idx) => {
