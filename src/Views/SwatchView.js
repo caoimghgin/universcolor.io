@@ -3,8 +3,8 @@ import styled from '@emotion/styled/macro';
 
 export default function SwatchView(props) {
 
-    const [model, setModel] = useState(null)
-    const [fontSize, setFontSize] = useState("22px")
+    const [model, setModel] = useState()
+    const [fontSize, setFontSize] = useState("8px")
     const [fontWeight, setFontWeight] = useState(400)
     const [fontDecoration, setFontDecoration] = useState("none")
     const [background, setBackground] = useState("#F1F1F1")
@@ -15,37 +15,15 @@ export default function SwatchView(props) {
     const [displayValue, setDisplayValue] = useState(null)      // [L*d65, deltaPhiStar, wcag, ]
 
     useEffect(() => {
-        if (props.model) setModel(props.model)
-    }, [])
-
-    // useEffect(() => {
-    //     // const a = JSON.stringify(model)
-    //     // const b = JSON.stringify({...props.model, ...props.delegate})
-    //     // if (a === b) return
-    //     setModel(props.model)
-    //     // console.log("update...")
-
-    //     // if (model === {...props.model, ...props.delegate}) return 
-    //     // if (!props.model || !props.delegate) return
-    //     // const {model, delegate} = props
-    //     // const result = {...props.model, ...props.delegate}
-    //     // if (model !== result) {
-    //     //     console.log(model)
-    //     //     setModel({...props.model, ...props.delegate})
-    //     // }
-        
-    //     // setDelegate(props.delegate)
-    // })
-
-    // useEffect(() => {
-    //     if (displayContrast !== delegate.displayContrast) updateDisplayContrast()
-    //     if (displayValue !== delegate.displayValue) updateDisplayValue()
-    // }, [delegate])
+        if (!props.model || !props.delegate) return
+        setModel({...props.model, delegate:props.delegate})
+    }, [props.model, props.delegate])
 
     useEffect(() => {
-        if (!model || !model.color) return
-        setBackground(model.destination.value)
-        // updateDisplayValue()
+        if (!model) return
+        setBackground(model.value.destination)
+        updateDisplayValue()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [model])
 
     const updateDisplayContrast = () => {
@@ -66,11 +44,7 @@ export default function SwatchView(props) {
 
     const updateDisplayValue = () => {
 
-        // const { displayValue } = model.displayValue
-        // console.log(model)
-        return
-
-        if (!model) return
+        const {displayValue} = model.delegate
 
         switch (displayValue) {
             case "none":

@@ -10,7 +10,8 @@ export default class SwatchModel {
 
         if (color) {
             this.color = color;
-            this.value = color.to(color.space.id).toString()
+            // this.value = color.to(color.space.id).toString()
+            this.value = {origin: color.to(color.space.id).toString(), destination: color.to(destinationSpace).toString()}
             this.weight = luminanceToWeight(color.lab.l)
             this.origin = {value: color.to(color.space.id).toString(), space: color.space.id}
             this.destination = {value: color.to(destinationSpace).toString(), space: destinationSpace}
