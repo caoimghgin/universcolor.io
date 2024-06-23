@@ -74,8 +74,8 @@ export default class ColumnModel {
                 let target = targets[idx]
 
                 target = target !== 50 ? target : target - 0.50;
-                target = target !== 60 ? target : target - 1.50;
-                target = target !== 65 ? target : target - 2.00;
+                target = target !== 60 ? target : target + 1.00;
+                target = target !== 80 ? target : target - 0.50;
 
                 target = target !== 70 ? target : target - 1.50;
                 target = target !== 97.5 ? target : target - 0.75;

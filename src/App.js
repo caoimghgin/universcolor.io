@@ -20,7 +20,7 @@ const swatchDisplayOptions = [
 ];
 
 function App() {
-  const [appDelegate, setAppDelegate] = useState({ displayContrast: "wcag21", displayValue: "ciel*d65", a: "A" });
+  const [appDelegate, setAppDelegate] = useState({ displayContrast: "wcag21", displayValue: "ciel*d65" });
   const [selectedContrastOption, setSelectedConstrastOption] = useState(contrastAlgorithmOptions[0]);
   const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[2]);
   const [data, setData] = useState(null);
