@@ -1,28 +1,20 @@
 import { useState, useEffect } from "react"
-import ColorModel from './Univers/Models/ColorModel.js';
 import PaletteModel from './Univers/Models/PaletteModel.js';
 import PaletteView from './Views/PaletteView';
 import Select from 'react-select'
 import midtones from './Univers/constants/midtones.js'
 import midtones050 from './Univers/constants/midtones050.js'
 
-const contrastAlgorithmOptions = [
-  { value: 'wcag21', label: 'WCAG21' },
-  { value: 'apca', label: 'APCA' },
-];
-
 const swatchDisplayOptions = [
   { value: 'none', label: 'NONE' },
-  { value: 'wcag21', label: 'WCAG21' },
   { value: 'ciel*d65', label: 'CIE L* (d65)' },
-  { value: 'apcalc_white', label: 'APCA Lc (white)' },
-  { value: 'apcalc_black', label: 'APCA Lc (black)' },
+  { value: 'apcalc_white', label: 'APCA' },
+  { value: 'wcag21', label: 'WCAG21' },
 ];
 
 function App() {
   const [appDelegate, setAppDelegate] = useState({ displayContrast: "wcag21", displayValue: "ciel*d65" });
-  const [selectedContrastOption, setSelectedConstrastOption] = useState(contrastAlgorithmOptions[0]);
-  const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[2]);
+  const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[1]);
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -45,34 +37,15 @@ function App() {
 
   }, [])
 
-  // useEffect(() => {
-  //   dispatchEvent(new CustomEvent("selectedContrastOptionEvent", { detail: selectedContrastOption }));
-  // }, [selectedContrastOption])
-
-  // useEffect(() => {
-  //   dispatchEvent(new CustomEvent("selectedSwatchDisplayOptionEvent", { detail: selectedSwatchDisplayOption }));
-  // }, [selectedSwatchDisplayOption])
-
-  const onSelectConstrastChangeHandler = (event) => {
-    setSelectedConstrastOption(event)
-    setAppDelegate({ ...appDelegate, a: event.value, displayContrast: event.value });
-  }
-
   const onSelectSwatchDisplayChangeHandler = (event) => {
     setSelectedSwatchDisplayOption(event)
     setAppDelegate({ ...appDelegate, displayValue: event.value });
   }
 
-  // Note that primary takes an oklch definition in CSS Color and spreads to white/black on the primary row/colum.
-  // And how secondary takes an lch definition and spreads to white/black.
-  // Further note that tertiary takes a hex and an oklab and spreads. Because the first item in the array is a hex, it renders in hex despite the second object being oklab
-
-
-
   return (
     <div className="App">
       <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
-      <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} />
+      {/* <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} /> */}
       <Select defaultValue={selectedSwatchDisplayOption} onChange={onSelectSwatchDisplayChangeHandler} options={swatchDisplayOptions} />
     </div>
   );

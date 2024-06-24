@@ -18,93 +18,93 @@ export default function SwatchView(props) {
     useEffect(() => {
         if (!props.model || !props.delegate) return
         setModel({ ...props.model, delegate: props.delegate })
-
-        // const foo = fontLookupAPCA(90, 2)
-        // console.log("FOO", foo)
-        // console.log("NORMAL:", foo[4])
-
     }, [props.model, props.delegate])
 
     useEffect(() => {
         if (!model) return
         setBackground(model.value.destination)
         updateDisplayValue()
-        updateDisplayStyle()
+        // updateDisplayStyle()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [model])
 
-    const updateDisplayContrast = () => {
+    const updateDisplayAPCA = () => {
 
-        // const { displayContrast } = delegate
-        // switch (displayContrast) {
-        //     case "wcag21":
-        //         setDisplayValue(displayContrast)
-        //         break;
-        //     case "apca":
-        //         setDisplayValue(displayContrast)
-        //         break;
-        //     default:
-        //         setDisplayValue(displayContrast)
-        // }
+        setFontWeight(400)
+        const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
+        const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
+
+        if (fontLookupWhite[4] <= 18.666) {
+            setColor("#FFFFFF")
+            setFontSize(`${fontLookupWhite[4]}px`)
+            setFontWeight(400)
+        } else if (fontLookupWhite[7] <= 18.666) {
+            setColor("#FFFFFF")
+            setFontSize(`${fontLookupWhite[7]}px`)
+            setFontWeight(700)
+        } else if (fontLookupBlack[4] <= 18.666) {
+            setColor("#000000")
+            setFontSize(`${fontLookupBlack[4]}px`)
+            setFontWeight(400)
+        } else if (fontLookupBlack[7] <= 18.666) {
+            setColor("#000000")
+            setFontSize(`${fontLookupBlack[7]}px`)
+            setFontWeight(700)
+        }
+
+        if (Math.abs(model.color.apca_white) > Math.abs(model.color.apca_black)) {
+            setDisplayValue((Math.floor(model.color.apca_white * 100) / 100).toFixed(1))
+        } else {
+            setDisplayValue((Math.floor(model.color.apca_black * 100) / 100).toFixed(1))
+        }
+
     }
 
+    const updateDisplayCIEL = () => {
 
-    const updateDisplayStyle = () => {
+        setFontWeight(400)
+        setFontSize("1rem")
 
-        // Display user input values with underlines 
-        if (model.priority > 0) setFontDecoration("underline")
+        const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
+        const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
 
-            if (model.delegate.displayContrast === "apca") {
-                setFontWeight(400)
-                const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
-                const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
+        if (fontLookupWhite[4] <= 18.666) {
+            setColor("#FFFFFF")
+        } else if (fontLookupWhite[7] <= 18.666) {
+            setColor("#FFFFFF")
+        } else if (fontLookupBlack[4] <= 18.666) {
+            setColor("#000000")
+        } else if (fontLookupBlack[7] <= 18.666) {
+            setColor("#000000")
+        }
 
-                if (fontLookupWhite[4] <= 18.666) {
-                    setColor("#FFFFFF")
-                    setFontSize(`${fontLookupWhite[4]}px`)
-                    setFontWeight(400)
-                } else if (fontLookupWhite[7] <= 18.666) {
-                    setColor("#FFFFFF")
-                    setFontSize(`${fontLookupWhite[7]}px`)
-                    setFontWeight(700)
-                } else if (fontLookupBlack[4] <= 18.666) {
-                    setColor("#000000")
-                    setFontSize(`${fontLookupBlack[4]}px`)
-                    setFontWeight(400)
-                } else if (fontLookupBlack[7] <= 18.666) {
-                    setColor("#000000")
-                    setFontSize(`${fontLookupBlack[7]}px`)
-                    setFontWeight(700)
-                } 
+        setDisplayValue((model.color.lab_d65.l).toFixed(1))
+    }
 
-                // setFontSize()`${}px`)
-                return
-            }
+    const updateDisplayWCAG21 = () => {
 
+        if (model.color.wcag_white < 3.0) {
+            setColor("#000000")
+            setFontWeight(400)
+            setFontSize("1.0rem")
+        }
 
-        if (model.delegate.displayContrast === "wcag21") {
+        if (model.color.wcag_white >= 3.0 && model.color.wcag_white < 4.5) {
+            setColor("#FFFFFF")
+            setFontWeight(700)
+            setFontSize("1.1665rem")
+        }
 
-            if (model.color.wcag_white < 3.0) {
-                setColor("#000000")
-                setFontWeight(400)
-                setFontSize("1.0rem")
-            }
+        if (model.color.wcag_white >= 4.5) {
+            setColor("#FFFFFF")
+            setFontWeight(400)
+            setFontSize("1.0rem")
+        }
 
-            if (model.color.wcag_white >= 3.0 && model.color.wcag_white < 4.5) {
-                setColor("#FFFFFF")
-                setFontWeight(700)
-                setFontSize("1.1665rem")
-            }
-
-            if (model.color.wcag_white >= 4.5 ) {
-                setColor("#FFFFFF")
-                setFontWeight(400)
-                setFontSize("1.0rem")
-            }
-
-            // Large text is defined as 14 point (typically 18.66px) and bold or larger, or 18 point (typically 24px) or larger.
-            // WCAG 2.0 level AA requires a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text.
-
+        if (model.color.wcag_white < 3.0) {
+            setDisplayValue((Math.floor(model.color.wcag_black * 100) / 100))
+        } else {
+            setDisplayValue((Math.floor(model.color.wcag_white * 100) / 100))
         }
 
     }
@@ -112,59 +112,28 @@ export default function SwatchView(props) {
     const updateDisplayValue = () => {
 
         const { displayValue } = model.delegate
+        
+        if (model.priority > 0) {
+            setFontDecoration("underline")
+        } else {
+            setFontDecoration("none")
+        }
 
         switch (displayValue) {
-            case "none":
-                setDisplayValue("")
-                break;
             case "wcag21":
-                if (model.color.wcag_white < 3.0) {
-                    setDisplayValue((Math.floor(model.color.wcag_black * 100) / 100))
-                    break;
-                }
-                setDisplayValue((Math.floor(model.color.wcag_white * 100) / 100))
+                updateDisplayWCAG21()
                 break;
             case "ciel*d65":
-                setDisplayValue((model.color.lab_d65.l).toFixed(1))
+                updateDisplayCIEL()
                 break;
             case "apcalc_white":
-                
-                if (Math.abs(model.color.apca_white) > Math.abs(model.color.apca_black)) {
-                    setDisplayValue((Math.floor(model.color.apca_white * 100) / 100).toFixed(1))
-
-                } else {
-                    // setDisplayValue("X")
-                    setDisplayValue((Math.floor(model.color.apca_black * 100) / 100).toFixed(1))
-
-                }
-
-
-                // if (model.color.apca_white > model.color.apca_black) {
-                // } else {
-                //     setDisplayValue((Math.floor(model.color.apca_white * 100) / 100))
-                //     setDisplayValue((Math.floor(model.color.apca_black * 100) / 100))
-
-                // }
-                return
-
-
-
-
-
+                updateDisplayAPCA()
                 break;
             case "apcalc_black":
                 setDisplayValue(model.color.apca_black)
                 break;
             default:
-                setDisplayValue("XXX")
-        }
-    }
-
-    const updateDisplayAPCA = () => {
-        if (Math.abs(model.color.apca_white) > Math.abs(model.color.apca_black)) {
-            setDisplayValue((Math.floor(model.color.apca_white * 100) / 100).toFixed(1))
-        } else {
-            setDisplayValue((Math.floor(model.color.apca_black * 100) / 100).toFixed(1))
+                setDisplayValue("")
         }
     }
 
