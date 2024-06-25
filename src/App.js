@@ -85,8 +85,8 @@ const onKeyDownEventHandler = (event) => {
   if (event.key === "3") { console.log("broadcast out that somebody wants to see 3:1") }
   if (event.key === "4") { console.log("broadcast out that somebody wants to see 4.5:1") }
   if (event.key === "7") { console.log("broadcast out that somebody wants to see 7:1") }
-
   if (event.key === "Shift") dispatchEvent(new CustomEvent("SHOW_APCA", event));
+  if (event.key === "x") dispatchEvent(new CustomEvent("EXPORT_DATA", event))
 
 }
 
