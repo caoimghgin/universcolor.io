@@ -13,15 +13,11 @@ export default class SwatchModel {
         this.weight = luminanceToWeight(color.lab.l)
         this.index = weights.findIndex(item => item === this.weight);
         this.priority = (priority ? priority : 0)
-
         this.wcag_white = color.contrast(new Color("White"), "WCAG21")
         this.wcag_black = color.contrast(new Color("Black"), "WCAG21")
         this.apca_white = color.contrast(new Color("White"), "APCA")
         this.apca_black = color.contrast(new Color("Black"), "APCA")
-
         this.lab_d65_l = color.lab_d65.l
-
-
     }
 
 }
