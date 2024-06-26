@@ -40,7 +40,12 @@ export default class ColumnModel {
         this.init(Array.isArray(values) ? values : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
+        // this.cleaner();
 
+    }
+
+    cleaner() {
+        this.swatches.forEach(item => item.color = null)
     }
 
     insertBlackAndWhite() {
@@ -93,13 +98,15 @@ export default class ColumnModel {
 
             }
         });
+
+        candidateSwatches.length = 0
     }
 
-    getColors(space) {
-        const result = this.swatches.map(swatch => {
-            if (!space) return swatch.color
-            return swatch.color.as(space)
-        });
-        return result;
-    }
+    // getColors(space) {
+    //     const result = this.swatches.map(swatch => {
+    //         if (!space) return swatch.color
+    //         return swatch.color.as(space)
+    //     });
+    //     return result;
+    // }
 }
