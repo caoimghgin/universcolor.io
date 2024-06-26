@@ -31,8 +31,8 @@ export default function SwatchView(props) {
     const updateDisplayAPCA = () => {
 
         setFontWeight(400)
-        const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
-        const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
+        const fontLookupWhite = fontLookupAPCA(model.apca_white, 2)
+        const fontLookupBlack = fontLookupAPCA(model.apca_black, 2)
 
         if (fontLookupWhite[4] <= 18.666) {
             setColor("#FFFFFF")
@@ -52,10 +52,10 @@ export default function SwatchView(props) {
             setFontWeight(700)
         }
 
-        if (Math.abs(model.color.apca_white) > Math.abs(model.color.apca_black)) {
-            setDisplayValue((Math.floor(model.color.apca_white * 100) / 100).toFixed(1))
+        if (Math.abs(model.apca_white) > Math.abs(model.apca_black)) {
+            setDisplayValue((Math.floor(model.apca_white * 100) / 100).toFixed(1))
         } else {
-            setDisplayValue((Math.floor(model.color.apca_black * 100) / 100).toFixed(1))
+            setDisplayValue((Math.floor(model.apca_black * 100) / 100).toFixed(1))
         }
 
     }
@@ -65,8 +65,8 @@ export default function SwatchView(props) {
         setFontWeight(400)
         setFontSize("1rem")
 
-        const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
-        const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
+        const fontLookupWhite = fontLookupAPCA(model.apca_white, 2)
+        const fontLookupBlack = fontLookupAPCA(model.apca_black, 2)
 
         if (fontLookupWhite[4] <= 18.666) {
             setColor("#FFFFFF")
@@ -78,33 +78,33 @@ export default function SwatchView(props) {
             setColor("#000000")
         }
 
-        setDisplayValue((model.color.lab_d65.l).toFixed(1))
+        setDisplayValue((model.lab_d65_l).toFixed(1))
     }
 
     const updateDisplayWCAG21 = () => {
 
-        if (model.color.wcag_white < 3.0) {
+        if (model.wcag_white < 3.0) {
             setColor("#000000")
             setFontWeight(400)
             setFontSize("1.0rem")
         }
 
-        if (model.color.wcag_white >= 3.0 && model.color.wcag_white < 4.5) {
+        if (model.wcag_white >= 3.0 && model.wcag_white < 4.5) {
             setColor("#FFFFFF")
             setFontWeight(700)
             setFontSize("1.1665rem")
         }
 
-        if (model.color.wcag_white >= 4.5) {
+        if (model.wcag_white >= 4.5) {
             setColor("#FFFFFF")
             setFontWeight(400)
             setFontSize("1.0rem")
         }
 
-        if (model.color.wcag_white < 3.0) {
-            setDisplayValue((Math.floor(model.color.wcag_black * 100) / 100))
+        if (model.wcag_white < 3.0) {
+            setDisplayValue((Math.floor(model.wcag_black * 100) / 100))
         } else {
-            setDisplayValue((Math.floor(model.color.wcag_white * 100) / 100))
+            setDisplayValue((Math.floor(model.wcag_white * 100) / 100))
         }
 
     }
@@ -130,7 +130,7 @@ export default function SwatchView(props) {
                 updateDisplayAPCA()
                 break;
             case "apcalc_black":
-                setDisplayValue(model.color.apca_black)
+                setDisplayValue(model.apca_black)
                 break;
             default:
                 setDisplayValue("")
@@ -178,16 +178,7 @@ export default function SwatchView(props) {
 
     const onClickHandler = () => {
         console.log(model)
-        console.log(model.color.as("hex"))
-
-        const fontLookupWhite = fontLookupAPCA(model.color.apca_white, 2)
-        const fontLookupBlack = fontLookupAPCA(model.color.apca_black, 2)
-
-        console.log("fontLookupWhite", fontLookupWhite)
-        console.log("fontLookupBlack", fontLookupBlack)
-
     }
-
 
     return (
         <SwatchViewStyled onClick={onClickHandler}>{displayValue}
@@ -195,3 +186,5 @@ export default function SwatchView(props) {
         </SwatchViewStyled>
     )
 }
+
+// https://lch.oklch.com/#70,39,242,100

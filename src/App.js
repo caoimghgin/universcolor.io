@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
+
 import PaletteModel from './Univers/Models/PaletteModel.js';
+import ControlView from "./Views/ControlView.js";
 import PaletteView from './Views/PaletteView';
-import Select from 'react-select'
 import midtones from './Univers/constants/midtones.js'
 import midtones050 from './Univers/constants/midtones050.js'
 
@@ -12,13 +13,27 @@ const swatchDisplayOptions = [
   { value: 'wcag21', label: 'WCAG21' },
 ];
 
+const defaultParameters = () => {
+  const params = {}
+  params.primary = "oklch(49.25% 0.121 237.21)"
+  params.secondary = "lch(59.46% 86.13 59.27)"
+  params.tertiary = "#7b6747, oklab(35.512% 0.00687 0.03516)"
+  params.positive = "#007c00"
+  params.negative = "#d80000"
+  params.highlight = "#FFCF3D"
+  params.attention = "#FD6905"
+  params.info = "#035ef9"
+  params.system = "#0A66D8"
+  params.neutral = "#7F7F7F"
+  return params
+}
+
 function App() {
+
   const [appDelegate, setAppDelegate] = useState({ displayContrast: "wcag21", displayValue: "ciel*d65" });
-  const [selectedSwatchDisplayOption, setSelectedSwatchDisplayOption] = useState(swatchDisplayOptions[1]);
   const [data, setData] = useState(null);
 
   useEffect(() => {
-
     setData([
       { index: 0, semantic: "primary", values: ["oklch(49.25% 0.121 237.21)"] },
       { index: 1, semantic: "secondary", values: ["lch(59.46% 86.13 59.27)"] },
@@ -32,21 +47,40 @@ function App() {
       { index: 9, semantic: "neutral", values: ["#7F7F7F"] },
     ])
 
+    // setTimeout(function () {
+    //   const xxx = searchParams.get("www")
+    //   console.log("xxx", xxx)
+    //   // const xxx = data
+    //   // data[0] = { index: 0, semantic: "primary", values: ["#7F7F7F"] }
+    //   // setData(xxx)
+    // }, 2000);
+
+    window.addEventListener('UPDATE_DISPLAY_VALUES', foo);
+
+    // document.onkeydown = (event => onKeyDownEventHandler(event));
+
     document.onkeydown = (event => onKeyDownEventHandler(event));
     return () => document.removeEventListener("onkeydown", onKeyDownEventHandler)
 
+    
+
   }, [])
 
-  const onSelectSwatchDisplayChangeHandler = (event) => {
-    setSelectedSwatchDisplayOption(event)
-    setAppDelegate({ ...appDelegate, displayValue: event.value });
+  async function foo(event) {
+    console.log("I CAUGHT AN EVENT...", event)
+    await new Promise(r => setTimeout(r, 100));
+
+    setAppDelegate({...appDelegate, displayValue: event.detail})
+
+    // props.setDelegate({ ...props.delegate, displayValue: event.value })
+
+
   }
 
   return (
     <div className="App">
+      <ControlView setDelegate={setAppDelegate} delegate={appDelegate}/>
       <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
-      {/* <Select defaultValue={selectedContrastOption} onChange={onSelectConstrastChangeHandler} options={contrastAlgorithmOptions} /> */}
-      <Select defaultValue={selectedSwatchDisplayOption} onChange={onSelectSwatchDisplayChangeHandler} options={swatchDisplayOptions} />
     </div>
   );
 }
@@ -87,7 +121,7 @@ const onKeyDownEventHandler = (event) => {
   if (event.key === "7") { console.log("broadcast out that somebody wants to see 7:1") }
   if (event.key === "Shift") dispatchEvent(new CustomEvent("SHOW_APCA", event));
   if (event.key === "x") dispatchEvent(new CustomEvent("EXPORT_DATA", event))
-
 }
+
 
 export default App;
