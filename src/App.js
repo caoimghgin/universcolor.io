@@ -5,6 +5,7 @@ import ControlView from "./Views/ControlView.js";
 import PaletteView from './Views/PaletteView';
 import midtones from './Univers/constants/midtones.js'
 import midtones050 from './Univers/constants/midtones050.js'
+import SideNav from "./Views/SideNav.js";
 
 const swatchDisplayOptions = [
   { value: 'none', label: 'NONE' },
@@ -56,31 +57,30 @@ function App() {
     // }, 2000);
 
     window.addEventListener('UPDATE_DISPLAY_VALUES', foo);
-
-    // document.onkeydown = (event => onKeyDownEventHandler(event));
-
     document.onkeydown = (event => onKeyDownEventHandler(event));
     return () => document.removeEventListener("onkeydown", onKeyDownEventHandler)
 
-    
+
 
   }, [])
 
   async function foo(event) {
     console.log("I CAUGHT AN EVENT...", event)
     await new Promise(r => setTimeout(r, 100));
-
-    setAppDelegate({...appDelegate, displayValue: event.detail})
-
+    setAppDelegate({ ...appDelegate, displayValue: event.detail })
     // props.setDelegate({ ...props.delegate, displayValue: event.value })
-
-
   }
 
   return (
-    <div className="App">
-      <ControlView setDelegate={setAppDelegate} delegate={appDelegate}/>
+    <div className="App" style={style}>
+      <SideNav setDelegate={setAppDelegate} delegate={appDelegate} />
       <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
+
+      {/* <div>
+        <ControlView setDelegate={setAppDelegate} delegate={appDelegate} />
+        <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
+      </div> */}
+
     </div>
   );
 }
@@ -123,5 +123,10 @@ const onKeyDownEventHandler = (event) => {
   if (event.key === "x") dispatchEvent(new CustomEvent("EXPORT_DATA", event))
 }
 
+const style = {
+  display: "flex",
+  height: "100vh" /* Full viewport height */
+  // alignItems: "stretch",
+}
 
 export default App;

@@ -174,6 +174,12 @@ export default function SwatchView(props) {
                 display: inline-block;
                 position: absolute;
         };
+
+          outline-width: 1px;
+  outline-offset: 0;
+  outline-color: rgba(0, 130, 206, 0.75);
+  outline-style: solid;
+  animation: animateOutline 4s ease infinite;
 `;
 
     const onClickHandler = () => {

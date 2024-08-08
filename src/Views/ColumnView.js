@@ -1,10 +1,17 @@
 import SwatchView from "./SwatchView"
+import styled from '@emotion/styled/macro';
 
 export default function ColumnView(props) {
     const { delegate } = props;
     return (
-        <div className="ColumnView" style={{ display: 'flex' }}>            
-            {props.model.swatches.map((model, index) => <SwatchView key={index} model={model} delegate={delegate} />)}
-        </div>
+        <View className="ColumnView">
+            {props.model.swatches.map((model, index) => {
+                return <SwatchView key={index} model={model} delegate={delegate} />
+            })}
+        </View>
     )
 }
+
+const View = styled.div`
+    display: flex;
+    `
