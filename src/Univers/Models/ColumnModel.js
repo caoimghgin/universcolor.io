@@ -14,7 +14,7 @@ export default class ColumnModel {
 
         this.id = index
         this.semantic = semantic
-        this.destinationSpace = null
+        this.destinationSpace = "srgb"
 
         this.init = (values) => {
             this.id = index
@@ -24,7 +24,7 @@ export default class ColumnModel {
                 values = values.map(value => new ColorModel(value))
             }
 
-            this.destinationSpace = values ? values[0].space.id : null
+            if (values.length) this.destinationSpace = values && values.length ? values[0].space.id : null
 
             values.forEach((color, index) => {
                 const swatchModel = new SwatchModel({

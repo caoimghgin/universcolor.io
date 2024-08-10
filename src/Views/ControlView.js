@@ -18,7 +18,6 @@ export default function ControlView(props) {
     }
 
     const onSelectSwatchDisplayChangeHandler = async (event) => {
-        // await new Promise(r => setTimeout(r, 100));
         setSelectedSwatchDisplayOption(event)
         props.setDelegate({ ...props.delegate, displayValue: event.value })
     }

@@ -1,20 +1,33 @@
 import { luminosities } from "../Univers/constants"
-
-const containerStyle = { display: 'flex' }
-const itemStyle = { width: 50, height: 24, fontSize: "12px", fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }
+import styled from '@emotion/styled/macro';
 
 export default function LuminositiesView() {
     return (
-        <div className="LuminocitiesContainer" style={containerStyle}>
+        <View className="LuminocitiesContainer">
             {luminosities.map((luminosity, index) => <LuminanceView key={index} model={luminosity} />)}
-        </div>
+        </View>
     )
 }
 
 function LuminanceView(props) {
     return (
-        <div className="LuminocityView" style={itemStyle}>
+        <ItemView className="LuminocityView">
             {props.model.toString()}
-        </div>
+        </ItemView>
     )
 }
+
+const View = styled.div`
+    display: flex;
+    `
+
+const ItemView = styled.div`
+    display: flex;
+    width: 50px;
+    height:24;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    `

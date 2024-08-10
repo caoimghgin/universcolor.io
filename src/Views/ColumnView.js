@@ -6,7 +6,7 @@ export default function ColumnView(props) {
     return (
         <View className="ColumnView">
             {props.model.swatches.map((model, index) => {
-                return <SwatchView key={index} model={model} delegate={delegate} />
+                return <SwatchView key={index} model={model} delegate={delegate} semantic={props.model.semantic} />
             })}
         </View>
     )

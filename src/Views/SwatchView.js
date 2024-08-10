@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled/macro';
 import { fontLookupAPCA } from 'apca-w3';
+import dogEarOnDark from "../Assets/dogEar-onLight.svg"
+import dogEarOnLight from "../Assets/dogEar-onDark.svg" 
 
 export default function SwatchView(props) {
 
+    const { semantic } = props
+    const { weight } = props.model.weight
     const [model, setModel] = useState()
     const [fontSize, setFontSize] = useState("16px")
     const [fontWeight, setFontWeight] = useState(400)
@@ -14,6 +18,7 @@ export default function SwatchView(props) {
     const [delegate, setDelegate] = useState(props.delegate)
     const [displayContrast, setDisplayContrast] = useState("wcag21")
     const [displayValue, setDisplayValue] = useState(null)      // [L*d65, deltaPhiStar, wcag, ]
+    const [outlineColor, setOutlineColor] = useState(null)
 
     useEffect(() => {
         if (!props.model || !props.delegate) return
@@ -27,6 +32,11 @@ export default function SwatchView(props) {
         // updateDisplayStyle()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [model])
+
+    useEffect(() => {
+        if (!color) return
+        setOutlineColor((color === "#FFFFFF" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.33)"))
+    }, [color])
 
     const updateDisplayAPCA = () => {
 
@@ -112,12 +122,12 @@ export default function SwatchView(props) {
     const updateDisplayValue = () => {
 
         const { displayValue } = model.delegate
-        
-        if (model.priority > 0) {
-            setFontDecoration("underline")
-        } else {
-            setFontDecoration("none")
-        }
+
+        // if (model.priority > 0) {
+        //     setFontDecoration("underline")
+        // } else {
+        //     setFontDecoration("none")
+        // }
 
         switch (displayValue) {
             case "wcag21":
@@ -137,60 +147,130 @@ export default function SwatchView(props) {
         }
     }
 
-    const SwatchViewDetailStyled = styled.div`
+    const ViewHovered = styled.div`
         visibility: hidden;
         display: none;
         opacity:0;
-        color: black;
-        font-weight: 400;
-        font-size: 14pt;
+        font-weight: 700;
+        padding-top: 8px;
+        font-size: 11pt;
         background: ${background};
+        color: ${color};
         transition:visibility 0.3s linear,opacity 0.3s linear;
         text-align: center;
-        vertical-align: middle;
-        line-height: 80px;
-        width:100px;
-        height:100px;
+        z-index: 1000;
+        width: 140px;
+        min-width: 140px;
+        height: 130px;
+        min-height: 130px;
         filter: drop-shadow(0px 0px 10px rgba(0,0,0,0.25)); 
+        outline: 1px solid ${outlineColor};
+        outline-offset: -5px;
+          &:before {
+            content: " ";
+            position: absolute;
+            z-index: -1;
+            top: 45px;
+            left: 45px;
+            right: 45px;
+            bottom: 45px;
+            border: 1px solid ${outlineColor};
+            }
+        &:after {
+            content: " ";
+            position: absolute;
+            z-index: -1;
+            top: 50px;
+            left: 50px;
+            right: 50px;
+            bottom: 50px;
+            border: ${model && model.priority > 0 ? `1px solid ${outlineColor}` : null} ;
+            }
 `;
 
-    const SwatchViewStyled = styled.div`
+    const View = styled.div`
+        width: 50px;
+        min-width: 50px;
+        height: 50px;
+        min-height: 50px;
+        background: ${background};
+
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        
         visibility: visible;
-        width: 50px;
-        height: 50px;
         font-weight: ${fontWeight};
-        background: ${background};
         font-size: ${fontSize};
         color: ${color};
         text-decoration: ${fontDecoration};
         &:hover { 
-            ${SwatchViewDetailStyled} {
+            ${ViewHovered} {
                 opacity:1;
                 visibility: visible;
                 display: inline-block;
                 position: absolute;
         };
-
-          outline-width: 1px;
-  outline-offset: 0;
-  outline-color: rgba(0, 130, 206, 0.75);
-  outline-style: solid;
-  animation: animateOutline 4s ease infinite;
 `;
 
     const onClickHandler = () => {
         console.log(model)
     }
 
+    const jjj = () => {
+        if (!model) return
+        if (model.priority > 0) {
+            return {
+                outline: `1px solid ${outlineColor}`,
+                outlineRadius: `2px`,
+                outlineOffset: "-5px"
+            }
+        }
+
+    }
+
+    const LuminosityView = styled.div`
+    font-size:9.5pt;
+        font-weight: 400;
+        padding-top: 1.5px;
+        `
+    const dogEarIcon = () => {
+
+        const View = styled.img`
+          position: absolute;
+          top: 1px;
+          right: 1px;`
+
+        if (model && model.priority > 0) {
+            if (color === "#FFFFFF") {
+                return (<View src={dogEarOnLight} alt="DogEar Icon" />)
+            } else {
+                return (<View src={dogEarOnDark} alt="DogEar Icon" />)
+            }
+        }
+
+    }
+
     return (
-        <SwatchViewStyled onClick={onClickHandler}>{displayValue}
-            <SwatchViewDetailStyled></SwatchViewDetailStyled>
-        </SwatchViewStyled>
+        <View onClick={onClickHandler}>
+            {dogEarIcon()}
+            {displayValue}
+            <ViewHovered>
+                {semantic}-{props.model.weight}
+                <LuminosityView>L*{model ? (model.lab_d65_l).toFixed(1) : ""}</LuminosityView>
+            </ViewHovered>
+        </View>
     )
+}
+
+
+
+const sss = {
+    outline: "2px solid blue",
+    outlineOffset: "-4px"
+
 }
 
 // https://lch.oklch.com/#70,39,242,100

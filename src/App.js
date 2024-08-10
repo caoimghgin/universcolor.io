@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 
 import PaletteModel from './Univers/Models/PaletteModel.js';
-import ControlView from "./Views/ControlView.js";
 import PaletteView from './Views/PaletteView';
 import midtones from './Univers/constants/midtones.js'
 import midtones050 from './Univers/constants/midtones050.js'
@@ -35,17 +34,18 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+
     setData([
       { index: 0, semantic: "primary", values: ["oklch(49.25% 0.121 237.21)"] },
-      { index: 1, semantic: "secondary", values: ["lch(59.46% 86.13 59.27)"] },
-      { index: 2, semantic: "tertiary", values: ["#7b6747", "oklab(35.512% 0.00687 0.03516)"] },
-      { index: 3, semantic: "positive", values: ["#007c00"] },
-      { index: 4, semantic: "negative", values: ["#d80000"] },
-      { index: 5, semantic: "highlight", values: ["#FFCF3D"] },
-      { index: 6, semantic: "attention", values: ["#FD6905"] },
-      { index: 7, semantic: "info", values: ["#035ef9"] },
-      { index: 8, semantic: "system", values: ["#0A66D8"] },
-      { index: 9, semantic: "neutral", values: ["#7F7F7F"] },
+      { index: 1, semantic: "secondary", values: ["#7b6747", "oklab(35.512% 0.00687 0.03516)"] },
+      { index: 2, semantic: "positive", values: ["#007c00"] },
+      { index: 3, semantic: "negative", values: ["#d80000"] },
+      { index: 4, semantic: "highlight", values: ["#ffc107"] },
+      { index: 5, semantic: "attention", values: ["#F26722"] },
+      { index: 6, semantic: "info", values: ["#035ef9"] },
+      { index: 7, semantic: "neutral", values: null },
+      { index: 8, semantic: "system info", values: ["#0A66D8"] },
+      { index: 9, semantic: "system neutral", values: null },
     ])
 
     // setTimeout(function () {
@@ -60,8 +60,6 @@ function App() {
     document.onkeydown = (event => onKeyDownEventHandler(event));
     return () => document.removeEventListener("onkeydown", onKeyDownEventHandler)
 
-
-
   }, [])
 
   async function foo(event) {
@@ -75,12 +73,6 @@ function App() {
     <div className="App" style={style}>
       <SideNav setDelegate={setAppDelegate} delegate={appDelegate} />
       <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
-
-      {/* <div>
-        <ControlView setDelegate={setAppDelegate} delegate={appDelegate} />
-        <PaletteView model={new PaletteModel(data)} delegate={appDelegate} />
-      </div> */}
-
     </div>
   );
 }
@@ -125,8 +117,7 @@ const onKeyDownEventHandler = (event) => {
 
 const style = {
   display: "flex",
-  height: "100vh" /* Full viewport height */
-  // alignItems: "stretch",
+  height: "100vh"
 }
 
 export default App;
