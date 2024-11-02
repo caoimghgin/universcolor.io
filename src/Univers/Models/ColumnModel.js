@@ -40,7 +40,6 @@ export default class ColumnModel {
         this.init(Array.isArray(values) ? values : []);
         this.insertBlackAndWhite();
         this.tweenSwatches();
-        // this.cleaner();
 
     }
 
@@ -49,14 +48,14 @@ export default class ColumnModel {
     }
 
     insertBlackAndWhite() {
-
+        const targetsLength = targets.length - 1
         if (this.swatches[0] === null) {
             const color = new ColorModel("White");
             this.swatches[0] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
         }
-        if (this.swatches[21] === null) {
+        if (this.swatches[targetsLength] === null) {
             const color = new ColorModel("Black");
-            this.swatches[21] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
+            this.swatches[targetsLength] = new SwatchModel({ color: color, destinationSpace: this.destinationSpace })
         }
     }
 
@@ -83,10 +82,10 @@ export default class ColumnModel {
                 target = target !== 80 ? target : target - 0.50;
 
                 target = target !== 70 ? target : target - 1.50;
-                target = target !== 97.5 ? target : target - 0.75;
-                target = target !== 95.0 ? target : target - 1.00;
+                // target = target !== 97.5 ? target : target - 0.75;
+                // target = target !== 95.0 ? target : target - 1.00;
 
-                target = target !== 90.0 ? target : target - 1.00;
+                target = target !== 90.0 ? target : target - 0.50;
                 target = target !== 5.0 ? target : target + 0.25;
 
                 const color = candidateSwatches.reduce(function (prev, curr) {
