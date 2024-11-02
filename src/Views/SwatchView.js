@@ -217,18 +217,7 @@ export default function SwatchView(props) {
 
     const onClickHandler = () => {
         console.log(model)
-    }
-
-    const jjj = () => {
-        if (!model) return
-        if (model.priority > 0) {
-            return {
-                outline: `1px solid ${outlineColor}`,
-                outlineRadius: `2px`,
-                outlineOffset: "-5px"
-            }
-        }
-
+        navigator.clipboard.writeText(model.hex)
     }
 
     const LuminosityView = styled.div`

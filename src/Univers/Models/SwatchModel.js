@@ -18,6 +18,7 @@ export default class SwatchModel {
         this.apca_white = color.contrast(new Color("White"), "APCA")
         this.apca_black = color.contrast(new Color("Black"), "APCA")
         this.lab_d65_l = color.lab_d65.l
+        this.hex = color.as("hex")
     }
 
 }
